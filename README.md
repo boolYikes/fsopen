@@ -3,6 +3,6 @@
 - Ex02
 - Ex03
 - [Ex04](https://github.com/boolYikes/fsopen/blob/main/Part00/ex04.md)
-- Ex05
-- Ex06
+- [Ex05](https://github.com/boolYikes/fsopen/blob/main/Part00/ex05.md)
+- [Ex06](https://github.com/boolYikes/fsopen/blob/main/Part00/ex06.md)
 ## Part 1
