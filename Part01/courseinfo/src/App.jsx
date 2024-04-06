@@ -6,6 +6,17 @@ const Header = (arg) => {
   )
 }
 const Content = (arg) => {
+  const p = arg.parts
+  const e = arg.exercises
+  return (
+    <>
+      <Part pName={p[0]} exNum={e[0]}/>
+      <Part pName={p[1]} exNum={e[1]}/>
+      <Part pName={p[2]} exNum={e[2]}/>
+    </>
+  )
+}
+const Part = (arg) => {
   return (
     <>
       <p>
@@ -31,9 +42,7 @@ const App = () => {
   return (
     <div>
       <Header cTitle={course}/>
-      <Content pName={parts[0]} exNum={exercises[0]}/>
-      <Content pName={parts[1]} exNum={exercises[1]}/>
-      <Content pName={parts[2]} exNum={exercises[2]}/>
+      <Content parts={parts} exercises={exercises}/>
       <Total exNum1={exercises[0]} exNum2={exercises[1]} exNum3={exercises[2]}/>
     </div>
   )
