@@ -1,2 +1,2 @@
 # Part1
-## Exercise 1.1 - 1.2
+- Please refer to commits for indiv exercise inspection, if needed.
