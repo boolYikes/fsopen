@@ -1,7 +1,4 @@
 import { useState } from 'react'
-const Heading = (props) => (<><h2>{props.text}</h2></>)
-const Content = (props) => (<><h4>{props.text}</h4></>)
-const Button = (props) => (<><button onClick={props.handleClick}>{props.name}</button></>)
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -13,33 +10,32 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-  const handleClick = () => {
-    const rand = Math.floor(Math.random() * (anecdotes.length))
-    setSelected(rand)
-  }
-  const handleVote = () => {
-    const temp = [...count]
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const [max, setMax] = useState(0)
+  // console.log(votes)
+  const onNext = () => setSelected(Math.floor(Math.random()*anecdotes.length))
+  const onVote = () => {
+    const temp = [...votes]
     temp[selected] += 1
-    setCount(temp)
-    const newBest = temp.indexOf(temp.sort()[temp.length-1])
-    //console.log(newBest)
-    setBest(newBest)
+    setVotes(temp)
+    const mx = Math.max(...temp)
+    // console.log(temp.findIndex(e => e === mx))
+    setMax(temp.findIndex(e => e === mx))
   }
-  const [selected, setSelected] = useState(Math.floor(Math.random() * (anecdotes.length)))
-  const [count, setCount] = useState([0, 0, 0, 0, 0, 0, 0, 0])
-  const [best, setBest] = useState(0)
+  const Button = (props) => (<><button onClick={props.handleClick}>{props.text}</button></>)
+  const Heading = (props) => (<><h1>{props.text}</h1></>)
+  const Content = (props) => (<><p>{props.text}</p></>)
   return (
     <div>
-      <Heading text='Anecdote of the day'/>
+      <Heading text='Anecdotes of the day'/>
       <Content text={anecdotes[selected]}/>
-      <Content text={'has ' + count[selected] + ' vote(s)'}/>
-      <Button handleClick={() => {handleVote()}} name='vote'/>
-      <Button handleClick={() => {handleClick()}} name='next anecdote'/>
-      <Heading text='Anecdote with most votes'/>
-      <Content text={anecdotes[best]}/>
-      <Content text={'has ' + count[best] + ' vote(s)'}/>
+      <Button handleClick={() => {onVote()}} text='vote'/>
+      <Button handleClick={() => {onNext()}} text='next'/>
+      <Heading text='Anecdotes with most votes'/>
+      <Content text={anecdotes[max]}/>
+      <Content text={'has ' + votes[max] + ' votes'}/>
     </div>
   )
 }
-
 export default App
