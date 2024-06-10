@@ -1,23 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Filter from './components/Filter'
 import Search from './components/Search'
 import Form from './components/Form'
+import axios from 'axios'
+
 const App = () => {
   // States
-  const [persons, setPersons] = useState([ // Data for tests
-    {name: 'Arto Hellas', id: 1, number: '012-3456-7890'},
-    {name: 'Dyrm Wyrm', id: 2, number: '011-1234-5678'},
-    {name: 'John Doe', id: 3, number: '234-5264-7678'},
-    {name: 'Angie McGraw', id:4, number: '456-234-1233'},
-    {name: 'Simon Sean', id:5, number: '678-12-4567'},
-    {name: 'Nom De Plume', id:6, number: '345-123-234'},
-    {name: 'Terminator', id:7, number: '878-323-454'}
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [alertMessage, setAlert] = useState('')
-  const [searchRes, setSearchRes] = useState(persons)
+  const [searchRes, setSearchRes] = useState([])
+
+  // Request data
+  const hook = () => {
+    axios
+    .get("http://localhost:3001/persons")
+    .then(response => {
+      setPersons(response.data)
+      setSearchRes(response.data)
+    })
+  }
+  useEffect(hook, [])
+
   // Handlers
   const handleChange = (event) => { // name field change handler
     setNewName(event.target.value)
