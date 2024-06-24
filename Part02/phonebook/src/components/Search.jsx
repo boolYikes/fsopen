@@ -1,9 +1,11 @@
 import Person from './Person'
-const Search = ({result}) => {
+const Search = ({result, del}) => {
     return (
-        <div>
-            {result.map((person) => <Person key={person.id} name={person.name} number={person.number}/>)}
-        </div>
+        <ul>
+            {result.map((person) => 
+                <Person key={person.id}  name={person.name} number={person.number} del={del}/>
+            )}
+        </ul>
     )
 }
 export default Search
