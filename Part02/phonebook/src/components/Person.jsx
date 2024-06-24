@@ -1,8 +1,10 @@
-const Person = ({name, number}) => {
+import Button from './Button'
+const Person = ({name, number, del, id}) => {
     return (
-        <div>
-            <p>{name}, {number}</p>
-        </div>
+        <li>
+            <span>{name}, {number}</span>
+            <Button key={id} handler={del} name='delete'/>
+        </li>
     )
 }
 export default Person

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Filter from './components/Filter'
-import Search from './components/Search'
 import Form from './components/Form'
-import axios from 'axios'
+import ybService from './services/persons'
+import Person from './components/Person'
 
 const App = () => {
   // States
@@ -12,14 +12,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [alertMessage, setAlert] = useState('')
   const [searchRes, setSearchRes] = useState([])
-
   // Request data
   const hook = () => {
-    axios
-    .get("http://localhost:3001/persons")
-    .then(response => {
-      setPersons(response.data)
-      setSearchRes(response.data)
+    ybService.selectAll()
+    .then(wholeList => {
+      setPersons(wholeList)
+      setSearchRes(wholeList)
     })
   }
   useEffect(hook, [])
@@ -39,24 +37,60 @@ const App = () => {
     event.preventDefault()
     const newbie = {
       name: newName,
-      id: persons.length + 1,
+      id: (persons.length + 1).toString() + newName,
       number: newNumber
     }
-    if (persons.filter(person => person.name === newbie.name).length > 0) {
-      alert(`The name ${newbie.name} already exists.`)
+    const tmpPerson = persons.filter(person => person.name === newbie.name)
+    if (tmpPerson) {
+      const conf = window.confirm(`The name ${newbie.name} already exists. REPLACE IT?`)
+      if(conf){
+        // console.log(tmpPerson) // it's an array
+        const modified = {
+          id: tmpPerson[0].id, // don't change id !!
+          name: newbie.name,
+          number: newbie.number
+        }
+        ybService.update(modified)
+        .then(result => {
+          setPersons(persons.filter(person => person.id !== modified.id).concat(result))
+          if(searchRes.filter(res => res.id === modified.id)){
+            setSearchRes(searchRes.filter(res => res.id !== modified.id).concat(result))
+          }
+          setNewName('')
+          setNewNumber('')
+        })
+      }
     }else if (newbie.number.split('-').filter(n => isNaN(parseInt(n))).length > 0) {
       alert('The number contains non-digits.')
     }else{
-      setPersons(persons.concat(newbie))
-      setSearchRes(persons.concat(newbie))
-      setNewName('')
-      setNewNumber('')
+      ybService.insert(newbie)
+      .then(newPerson => {
+        setPersons(persons.concat(newPerson))
+        setSearchRes(persons.concat(newPerson))
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
   const handleFilter = (event) => { // search field handler
     const newRes = persons.filter(person => person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1)
     // console.log(newRes)
     setSearchRes(newRes)
+  }
+  const handleDelete = (id) => { // deleeeeeeeete!
+    // console.log(id, ' will be deleted')
+    const conf = window.confirm("Boot them?")
+    if(conf){
+      ybService.del(id)
+      .then(result => {
+        // console.log(result)
+        const newList = persons.filter(person => person.id !== id)
+        const newSearchRes = searchRes.filter(res => res.id !== id)
+        setPersons(newList)
+        setSearchRes(newSearchRes)
+      })
+      .catch(error => console.log(error))
+    }
   }
   return (
     <div>
@@ -68,7 +102,11 @@ const App = () => {
       numberInputHandler={handleNumberInput}
       newName={newName} newNumber={newNumber} alertMessage={alertMessage}/>
       <Header title={'Numbers'}/>
-      <Search result={searchRes}/>
+      <ul>
+        {searchRes.map(p => 
+          <Person key={p.id} name={p.name} number={p.number} del={() => handleDelete(p.id)}/>
+        )}
+      </ul>
     </div>
   )
 }
