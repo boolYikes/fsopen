@@ -1,9 +1,12 @@
+// Imports
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import ybService from './services/persons'
 import Person from './components/Person'
+import Message from './components/Message'
+import './index.css'
 
 const App = () => {
   // States
@@ -12,7 +15,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [alertMessage, setAlert] = useState('')
   const [searchRes, setSearchRes] = useState([])
-  // Request data
+  const [message, setMessage] = useState({string:null, type:null})
+
+  // Request data on load
   const hook = () => {
     ybService.selectAll()
     .then(wholeList => {
@@ -22,18 +27,20 @@ const App = () => {
   }
   useEffect(hook, [])
 
-  // Handlers
+  // Name field charater check
   const handleChange = (event) => { // name field change handler
     setNewName(event.target.value)
     persons.filter(person => person.name === event.target.value).length > 0 ?
     setAlert('The name already exists.') : setAlert('You can use this name.')
   }
-  const handleNumberInput = (event) => { // number field change handler
+  // Number field character check ... just for fun
+  const handleNumberInput = (event) => {
     event.target.value.length % 4 === 0 ? 
     setNewNumber(`${event.target.value}-`) :
     setNewNumber(event.target.value)
   }
-  const handleSubmit = (event) => { // add button handler
+  // 'Add' button handler including the update function
+  const handleSubmit = (event) => {
     event.preventDefault()
     const newbie = {
       name: newName,
@@ -41,7 +48,7 @@ const App = () => {
       number: newNumber
     }
     const tmpPerson = persons.filter(person => person.name === newbie.name)
-    if (tmpPerson) {
+    if (tmpPerson.length > 0) {
       const conf = window.confirm(`The name ${newbie.name} already exists. REPLACE IT?`)
       if(conf){
         // console.log(tmpPerson) // it's an array
@@ -56,6 +63,14 @@ const App = () => {
           if(searchRes.filter(res => res.id === modified.id)){
             setSearchRes(searchRes.filter(res => res.id !== modified.id).concat(result))
           }
+          showMessage('Successfully updated info.', 'success')
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          showMessage('This person has been removed from the big brothers house', 'error')
+          setPersons(persons.filter(person => person.id !== modified.id))
+          setSearchRes(searchRes.filter(res => res.id !== modified.id))
           setNewName('')
           setNewNumber('')
         })
@@ -69,32 +84,54 @@ const App = () => {
         setSearchRes(persons.concat(newPerson))
         setNewName('')
         setNewNumber('')
+        showMessage('Successfully added new info.', 'success')
       })
     }
   }
-  const handleFilter = (event) => { // search field handler
+  // For operations result messages
+  const showMessage = (string, type) => {
+    const newMessage = {
+      string: string,
+      type: type
+    }
+    setMessage(newMessage)
+    setTimeout(()=>{
+      setMessage({string:null, type:null})
+    }, 4000)
+  }
+  // Search field handler
+  const handleFilter = (event) => {
     const newRes = persons.filter(person => person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1)
     // console.log(newRes)
     setSearchRes(newRes)
   }
-  const handleDelete = (id) => { // deleeeeeeeete!
+  // deleeeeeeeete!
+  const handleDelete = (id) => { 
     // console.log(id, ' will be deleted')
     const conf = window.confirm("Boot them?")
     if(conf){
       ybService.del(id)
       .then(result => {
         // console.log(result)
+        showMessage(`${result.id} is the weakest link!`, 'success')
         const newList = persons.filter(person => person.id !== id)
         const newSearchRes = searchRes.filter(res => res.id !== id)
         setPersons(newList)
         setSearchRes(newSearchRes)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        showMessage('The person is no longer in database. Refreshing.', 'error')
+        const newList = persons.filter(person => person.id !== id)
+        const newSearchRes = searchRes.filter(res => res.id !== id)
+        setPersons(newList)
+        setSearchRes(newSearchRes)
+      })
     }
   }
   return (
     <div>
       <Header title={'Phonebook'}/>
+      <Message message={message.string} type={message.type}/>
       <Filter handler={handleFilter}/>
       <Header title={'Add people'}/>
       <Form submitHandler={handleSubmit} 
