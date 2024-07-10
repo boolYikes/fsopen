@@ -36,39 +36,45 @@ const App = () => {
           type: 'error'
         }
         setMessage(newMessage)
+        setProfile(null)
         setSearchRes([])
       }else if (filtRes.length > 1){ // 2 ~ 10 results
         setSearchRes(filtRes)
+        setProfile(null)
         setMessage(null)
       }else if (filtRes.length > 0){ // 1 result
-        setSearchRes([])
-        setMessage(null)
-        axios // should i have put the data in the json server first? ...
-          .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${filtRes[0].name}`)
-          .then(response => {
-            const newProfile = {
-              name: response.data.name.common,
-              capital: response.data.capital[0],
-              area: response.data.area,
-              languages: response.data.languages,
-              flag: response.data.flags
-            }
-            setProfile(newProfile)
-          })
-          .catch(exception => {
-            console.log(exception)
-          })
+        showInfo(filtRes[0].name)
       }else{ // no result
         const newMessage = {
           text: 'No matches found.',
           type: 'error'
         }
         setSearchRes([])
+        setProfile(null)
         setMessage(newMessage)
       }
     }else{
       setSearchRes([])
     }
+  }
+  const showInfo = (name) => {
+    setSearchRes([])
+    setMessage(null)
+    axios // should i have put the data in the json server first? ...
+      .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
+      .then(response => {
+        const newProfile = {
+          name: response.data.name.common,
+          capital: response.data.capital[0],
+          area: response.data.area,
+          languages: response.data.languages,
+          flag: response.data.flags
+        }
+        setProfile(newProfile)
+      })
+      .catch(exception => {
+        console.log(exception)
+      })
   }
 
   return (
@@ -77,7 +83,7 @@ const App = () => {
       <Notification message={message}/>
       <Profile country={profile}/>
       <ul>{searchRes.map(country => 
-        <Country key={country.id} name={country.name}/>
+        <Country key={country.id} name={country.name} handleShowButton={()=>showInfo(country.name)}/>
       )}
       </ul>
     </div>
