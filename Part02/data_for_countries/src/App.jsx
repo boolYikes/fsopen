@@ -5,8 +5,8 @@ import Country from './components/Country'
 import Profile from './components/Profile'
 import Notification from './components/Notification'
 
-
 const App = () => {
+  const api_key = import.meta.env.VITE_WEATHERMAP_KEY
   const [countries, setCountries] = useState([])
   const [searchKW, setSearchKW] = useState('')
   const [searchRes, setSearchRes] = useState([])
@@ -62,15 +62,26 @@ const App = () => {
     setMessage(null)
     axios // should i have put the data in the json server first? ...
       .get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
-      .then(response => {
-        const newProfile = {
-          name: response.data.name.common,
-          capital: response.data.capital[0],
-          area: response.data.area,
-          languages: response.data.languages,
-          flag: response.data.flags
-        }
-        setProfile(newProfile)
+      .then(countryResponse => {
+        const lat = countryResponse.data.latlng[0]
+        const lon = countryResponse.data.latlng[1]
+        // console.log(api_key)
+        axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`)
+        .then(weatherResponse => {
+          const newProfile = {
+            name: countryResponse.data.name.common,
+            capital: countryResponse.data.capital[0],
+            area: countryResponse.data.area,
+            languages: countryResponse.data.languages,
+            flag: countryResponse.data.flags,
+            temperature: weatherResponse.data.main.temp,
+            icon: weatherResponse.data.weather[0].icon,
+            wind: weatherResponse.data.wind.speed
+          }
+          // console.log(response.data)
+          setProfile(newProfile)
+          })
       })
       .catch(exception => {
         console.log(exception)
