@@ -12,4 +12,5 @@
 ## [Part 2](https://github.com/boolYikes/fsopen/tree/main/Part02)
 - [Ex2.1-2.5 courseinfo_continued](https://github.com/boolYikes/fsopen/tree/main/Part02/courseinfo_continued)
 - [Ex2.6-2.11 phonebook](https://github.com/boolYikes/fsopen/tree/main/Part02/phonebook)
-- [Ex2.12-2.15 phonebook](https://github.com/boolYikes/fsopen/tree/main/Part02/phonebook)
+- [Ex2.12-2.17 phonebook](https://github.com/boolYikes/fsopen/tree/main/Part02/phonebook)
+- [Ex2.18-2.20 data for countries](https://github.com/boolYikes/fsopen/tree/main/Part02/data_for_countries)
