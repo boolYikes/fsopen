@@ -1,6 +1,23 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 app.use(express.json())
+morgan.token('content', (req, res) => {
+    const bd = JSON.stringify(req.body)
+    return bd
+})
+app.use(morgan((tokens, req, res) => {
+    return [
+        'LOG: ',
+        tokens.method(req, res),
+        tokens.url(req, res),
+        'HTTP/'+tokens['http-version'](req, res),
+        tokens.status(req, res),
+        tokens['response-time'](req, res), 'ms',
+        '\nCONTENT: '+tokens.content(req, res),
+        '\nTIME: '+tokens.date(req, res)
+    ].join(' ') // is it printing twice cuz it has tokens for both req and res?
+}))
 
 let byb = [
     { 
@@ -71,7 +88,8 @@ app.post('/api/persons', (request, response) => {
             error: 'No content'
         })
     }
-    if (byb.filter(person => person.name === body.name)) {
+    
+    if (byb.filter(person => person.name === body.name).length > 0) {
         return response.status(409).json({
             error: 'The name already exists'
         })
