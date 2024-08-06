@@ -1,10 +1,16 @@
 const express = require('express')
-const cors = require('cors')
-
 const app = express()
-app.use(cors())
-app.use(express.static('dist'))
+app.use(express.static('dist')) // I'm still not sure why we need this... index.html?
 app.use(express.json())
+const Note = require('./models/note')
+// course material doesn't mention this but it doesn't work without this line
+require('dotenv').config() 
+
+const mongoose = require('mongoose')
+
+const cors = require('cors')
+app.use(cors())
+
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
     console.log('Path:', request.path)
@@ -13,7 +19,6 @@ const requestLogger = (request, response, next) => {
     next()
 }
 app.use(requestLogger)
-
 let notes = [
     {
         id: 1,
@@ -36,7 +41,9 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello Warudo!!</h1>')
 })
 app.get('/api/notes', (request, response) => {
-    response.json(notes)
+    Note.find({}).then(notes => { // using mongoose to fetch from db
+        response.json(notes)
+    })
 })
 app.get('/api/notes/:id', (request, response) => {
     const id = request.params.id
@@ -85,7 +92,7 @@ const unknownEndpoint = (request, response) => {
 }
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001 // this is for deploying on host services
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
