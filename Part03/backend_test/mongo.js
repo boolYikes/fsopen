@@ -1,3 +1,4 @@
+// OBSOLETE AFTER EXERCISE 3.12
 const mongoose = require('mongoose')
 const arg_len = process.argv.length
 const pw = process.argv[2]
