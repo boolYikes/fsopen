@@ -1,9 +1,0 @@
-DELETE http://localhost:3001/api/persons/1
-###
-POST http://localhost:3001/api/persons/ HTTP/1.1
-content-type: application/json
-
-{
-    "name": "CCCC DDDD",
-    "number": "7065-2131-5555"
-}
