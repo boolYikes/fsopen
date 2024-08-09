@@ -44,7 +44,7 @@ const App = () => {
     event.preventDefault()
     const newbie = {
       name: newName,
-      id: (persons.length + 1).toString() + newName,
+      // id: (persons.length + 1).toString() + newName,
       number: newNumber
     }
     const tmpPerson = persons.filter(person => person.name === newbie.name)
