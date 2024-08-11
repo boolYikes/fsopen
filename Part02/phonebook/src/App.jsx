@@ -35,8 +35,9 @@ const App = () => {
   }
   // Number field character check ... just for fun
   const handleNumberInput = (event) => {
-    event.target.value.length % 4 === 0 ? 
-    setNewNumber(`${event.target.value}-`) :
+    // NOW WE HAVE A VALIDATOR FOR THIS. NO LONGER NEEDED
+    // event.target.value.length % 4 === 0 && event.target.value.length > 1 ? 
+    // setNewNumber(`${event.target.value}-`) :
     setNewNumber(event.target.value)
   }
   // 'Add' button handler including the update function
@@ -68,15 +69,17 @@ const App = () => {
           setNewNumber('')
         })
         .catch(error => {
-          showMessage('This person has been removed from the big brothers house', 'error')
+          showMessage(`${error.message}`, 'error')
           setPersons(persons.filter(person => person.id !== modified.id))
           setSearchRes(searchRes.filter(res => res.id !== modified.id))
           setNewName('')
           setNewNumber('')
         })
       }
-    }else if (newbie.number.split('-').filter(n => isNaN(parseInt(n))).length > 0) {
-      alert('The number contains non-digits.')
+    // THIS IS NOT NEEDED CUZ OF THE VALIDATOR
+    // }else if (newbie.number.split('-').filter(n => isNaN(parseInt(n))).length > 0) {
+    //   alert('The number contains non-digits.')
+    //   setNewNumber('')
     }else{
       ybService.insert(newbie)
       .then(newPerson => {
@@ -85,6 +88,12 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         showMessage('Successfully added new info.', 'success')
+      })
+      .catch(error => {
+        showMessage(`Name must be longer than 3, Number format: xxx-xxx... or xx-xxx...`, 'error')
+        // showMessage(`${error}`, 'error')
+        setNewName('')
+        setNewNumber('')
       })
     }
   }

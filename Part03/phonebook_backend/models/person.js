@@ -11,8 +11,21 @@ mongoose.connect(url)
         console.log(`Conn error: ${err}`)
     })
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
+    name: {
+        type: String,
+        minLength: [3, '!!Username must be longer than 3 characters'],
+        required: [true, 'Cannot be empty']
+    },
+    number: {
+        type: String,
+        validate:{
+            validator: (v) => {
+                return /^\d{2,3}-\d+$/.test(v);
+            },
+            message: props => `!!Invalid number: ${props.value}. Correct format: xxx-xxxxx, xx-xxx` 
+        },
+        required: [true, 'Cannot be empty']
+    }
 })
 personSchema.set('toJSON', {
     transform: (document, returnedObj) => {

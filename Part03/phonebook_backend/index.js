@@ -5,6 +5,7 @@ const cors = require('cors')
 const Person = require('./models/person')
 const path = require('path')
 const favicon = require('serve-favicon')
+const { error, assert } = require('console')
 
 app.use(express.json())
 app.use(express.static('dist'))
@@ -76,11 +77,12 @@ app.get("/info", (request, response) => {
         })
 })
 // Database query
-app.get("/api/persons", (request, response) => {
+app.get("/api/persons", (request, response, next) => {
     Person.find({})
         .then(p => {
             response.json(p)
         })
+        .catch(error => next(error))
 })
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
@@ -102,31 +104,40 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 app.post('/api/persons', (request, response, next) => {
-    const body = request.body
-    // console.log(body.content)
+    const {name, number} = request.body
     // isn't it better to handle empty input from the frontend?
-    if (body.name === undefined || body.number === undefined){
+    if (name === undefined || number === undefined){
         return response.status(400).json({
             error: 'No content'
         })
     }
     // post router no longer needs if-exist logic now that there's a PUT router
     const person = new Person({
-        name : body.name,
-        number : body.number,
+        name : name,
+        number : number,
     })
-    person.save().then(savedPerson => {
+    person.save()
+        .then(savedPerson => {
         response.json(savedPerson)
-    })
+        })
+        .catch((error) => {
+            if (error.name === 'ValidationError'){
+                const mssg = error.message.split("!!")[1]
+                const err = new Error(mssg)
+                err.status = 400
+                error = err
+            }
+            next(error)
+        })
 })
 // The if-exist-update logic is already handled by the frontend. I need a put router
 app.put('/api/persons/:id', (request, response, next) => {
-    const body = request.body
-    const person = {
-        name: body.name,
-        number: body.number,
-    }
-    Person.findByIdAndUpdate(request.params.id, person, {new: true})
+    const {name, number} = request.body
+    Person.findByIdAndUpdate(
+        request.params.id, 
+        {name, number}, 
+        {new: true, runValidators: true, context: 'query'}
+    )
         .then(updatedPerson => {
             response.json(updatedPerson)
         })
@@ -139,9 +150,11 @@ const unknownEndpoint = (req, res) => {
 }
 app.use(unknownEndpoint)
 const errorHandler = (err, req, res, next) => {
-    // console.error(err.message)
+    console.error(err.message)
     if (err.name === 'CastError'){
-        return express.response.status(400).send({error: 'Malformed ID'})
+        return res.status(400).send({error: 'Malformed ID'})
+    } else if (err.name === 'ValidationError') {
+        return res.status(400).json({error: err.message})
     }
     next(err)
 }
