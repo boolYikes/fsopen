@@ -20,9 +20,9 @@ const personSchema = new mongoose.Schema({
         type: String,
         validate:{
             validator: (v) => {
-                return /^\d{2,3}-\d+$/.test(v);
+                return /^\d{2,3}-\d+$/.test(v)
             },
-            message: props => `!!Invalid number: ${props.value}. Correct format: xxx-xxxxx, xx-xxx` 
+            message: props => `!!Invalid number: ${props.value}. Correct format: xxx-xxxxx, xx-xxx`
         },
         required: [true, 'Cannot be empty']
     }
