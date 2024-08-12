@@ -10,4 +10,5 @@
 - from proj root: npm install axios
 # ESlint
 - npm install eslint @eslint/js --save-dev
+- npm install --save-dev @stylistic/eslint-plugin-js
 - npx eslint --init
