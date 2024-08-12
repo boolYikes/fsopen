@@ -8,3 +8,6 @@
 | and then run : npm run server
 # Axios
 - from proj root: npm install axios
+# ESlint
+- npm install eslint @eslint/js --save-dev
+- npx eslint --init
