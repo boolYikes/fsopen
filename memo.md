@@ -1,3 +1,5 @@
+# Node
+- npm create vite@latest [PROJNAME] -- --template react for react proj.
 # Json Server
 - install json server: npm install -g json-server
 - if no sudo, run from proj root: npx json-server --port 3001 --watch db.json

@@ -23,3 +23,5 @@
 - [Ex3.15-3.18 phonebook database](https://github.com/boolYikes/fsopen/tree/main/Part03/phonebook_backend)
 - [Ex3.19-3.21 phonebook database](https://github.com/boolYikes/fsopen/tree/main/Part03/phonebook_backend)
 - [Ex3.22 phonebook eslint](https://github.com/boolYikes/fsopen/tree/main/Part03/phonebook_backend)
+## [Part 4](https://github.com/boolYikes/fsopen/tree/main/Part04)
+- [Ex4.1-4.2 blog list](https://github.com/boolYikes/fsopen/tree/main/Part03/blogList)
