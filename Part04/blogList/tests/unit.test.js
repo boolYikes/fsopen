@@ -91,3 +91,11 @@ describe('Well endowed blog-wise', () => {
         )
     })
 })
+
+describe('Most liked author', () => {
+    test('Author who has the max sum of likes', () => {
+        assert.deepStrictEqual(
+            listHelper.mostLikedAuthor(test_blogs),
+            { author: 'Test2', likes: 15})
+    })
+})

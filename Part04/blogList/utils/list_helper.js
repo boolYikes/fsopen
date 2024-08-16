@@ -27,10 +27,25 @@ const mostBlogsOwned = (blogs) => {
     })
     return mx
 }
+const mostLikedAuthor = (blogs) => {
+    const counter = new Map()
+    let mx = { author: "", likes: 0 }
+
+    blogs.forEach(blog => {
+        let curr = counter.get(blog.author) || 0
+        counter.set(blog.author, curr + blog.likes)
+
+        if (counter.get(blog.author) > mx.likes) {
+            mx = { author: blog.author, likes: counter.get(blog.author)}
+        }
+    })
+    return mx
+}
 
 module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogsOwned
+    mostBlogsOwned,
+    mostLikedAuthor
 }
