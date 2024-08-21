@@ -1,3 +1,38 @@
+const test_blogs = [
+    {
+        _id: '5a422aa71b54a676234d17f8',
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
+        likes: 5,
+        __v: 0
+    },
+    {
+        _id: '6a422aa71b54a676234d17f8',
+        title: 'Test1 title',
+        author: 'Test1',
+        url: 'https://test.url',
+        likes: 11,
+        __v: 0
+    },
+    {
+        _id: '7a422aa71b54a676234d17f8',
+        title: 'Test2 title',
+        author: 'Test2',
+        url: 'https://test2.url',
+        likes: 8,
+        __v: 0
+    },
+    {
+        _id: '8a422aa71b54a676234d17f8',
+        title: 'Test3 title',
+        author: 'Test2',
+        url: 'https://test2.url',
+        likes: 7,
+        __v: 0
+    }
+]
+
 const dummy = (blogs) => {
     console.log(`Dummy recieving ${blogs}`)
     return 1
@@ -43,6 +78,7 @@ const mostLikedAuthor = (blogs) => {
 }
 
 module.exports = {
+    test_blogs,
     dummy,
     totalLikes,
     favoriteBlog,
