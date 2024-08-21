@@ -34,12 +34,10 @@ describe('Favorite blog', () => {
         assert.deepStrictEqual(
             listHelper.favoriteBlog(listHelper.test_blogs),
             {
-                _id: '6a422aa71b54a676234d17f8',
                 title: 'Test1 title',
                 author: 'Test1',
                 url: 'https://test.url',
                 likes: 11,
-                __v: 0
             }
         )
     })
