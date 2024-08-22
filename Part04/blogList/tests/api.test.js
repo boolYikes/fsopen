@@ -37,7 +37,7 @@ test('id field as "id" check', async () => {
         , helper.test_blogs.length
     )
 })
-test.only('add post check', async () => {
+test('add post check', async () => {
     const testPost = {
         title: 'Add post test',
         author: 'Tuna',
@@ -59,6 +59,21 @@ test.only('add post check', async () => {
         likes: lastPost.likes
     }
     assert.deepStrictEqual(content, testPost)
+})
+test.only('"likes" property default check', async () => {
+    const testPost = {
+        title: "This is missing likes prop",
+        author: "Sloppy doug",
+        url: "http://dontlivelikeme.com"
+    }
+    await api
+        .post("/api/blogs")
+        .send(testPost)
+        .expect(201)
+        .expect("Content-Type", /application\/json/)
+    const currentBlogs = await helper.getAllBlogs()
+    // console.log(currentBlogs[currentBlogs.length - 1])
+    assert.strictEqual(currentBlogs[currentBlogs.length - 1].likes, 0)
 })
 
 after(async() => {
