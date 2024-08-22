@@ -23,7 +23,7 @@ test('total length of posts check', async () => {
     // console.log(allBlogs.body)
     assert.strictEqual(allBlogs.body.length, helper.test_blogs.length)
 })
-test.only('id field as "id" check', async () => {
+test('id field as "id" check', async () => {
     const allBlogs = await api.get('/api/blogs')
     const check = allBlogs.body.map(blog => {
         if ('id' in blog) {
@@ -36,6 +36,29 @@ test.only('id field as "id" check', async () => {
         }, 0)
         , helper.test_blogs.length
     )
+})
+test.only('add post check', async () => {
+    const testPost = {
+        title: 'Add post test',
+        author: 'Tuna',
+        url: 'https://dees.kr',
+        likes: 1
+    }
+    await api
+        .post('/api/blogs')
+        .send(testPost)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+    const currentPosts = await helper.getAllBlogs()
+    assert.strictEqual(currentPosts.length, helper.test_blogs.length + 1)
+    const lastPost = currentPosts[currentPosts.length - 1]
+    const content = {
+        title: lastPost.title,
+        author: lastPost.author,
+        url: lastPost.url,
+        likes: lastPost.likes
+    }
+    assert.deepStrictEqual(content, testPost)
 })
 
 after(async() => {

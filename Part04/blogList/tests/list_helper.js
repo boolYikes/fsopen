@@ -70,6 +70,10 @@ const mostLikedAuthor = (blogs) => {
     })
     return mx
 }
+const getAllBlogs = async () => {
+    const blogs = await Blog.find({})
+    return blogs.map(blog => blog.toJSON())
+}
 
 module.exports = {
     test_blogs,
@@ -77,5 +81,6 @@ module.exports = {
     totalLikes,
     favoriteBlog,
     mostBlogsOwned,
-    mostLikedAuthor
+    mostLikedAuthor,
+    getAllBlogs
 }
