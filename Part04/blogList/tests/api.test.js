@@ -60,7 +60,7 @@ test('add post check', async () => {
     }
     assert.deepStrictEqual(content, testPost)
 })
-test.only('"likes" property default check', async () => {
+test('"likes" property default check', async () => {
     const testPost = {
         title: "This is missing likes prop",
         author: "Sloppy doug",
@@ -74,6 +74,33 @@ test.only('"likes" property default check', async () => {
     const currentBlogs = await helper.getAllBlogs()
     // console.log(currentBlogs[currentBlogs.length - 1])
     assert.strictEqual(currentBlogs[currentBlogs.length - 1].likes, 0)
+})
+test.only('Bad request for no title and url', async () => {
+    const testPosts = [
+        {
+            author: 'Tuna',
+            likes: 2
+        },
+        {
+            title: 'No url',
+            author: 'Tuna',
+            likes: 1
+        },
+        {
+            url: 'http://notitle.org',
+            author: 'Tuna',
+        }
+    ]
+    const testPromises = testPosts.map(async (post) => {
+        await api
+            .post('/api/blogs')
+            .send(post)
+            .expect(400)
+    })
+    await Promise.all(testPromises)
+    
+    const currentBlogs = await helper.getAllBlogs()
+    assert.strictEqual(currentBlogs.length, helper.test_blogs.length)
 })
 
 after(async() => {
