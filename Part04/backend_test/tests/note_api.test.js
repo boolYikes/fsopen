@@ -38,14 +38,11 @@ describe('Test notes\' been init.', () => {
     describe('Specific notes', () => {
         test('Get note by id', async() => {
             const notesAtStart = await helper.notesInDb()
-        
             const noteToView = notesAtStart[0]
-        
             const queryResult = await api
                 .get(`/api/notes/${noteToView.id}`)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
-        
             assert.deepStrictEqual(queryResult.body, noteToView)
         })
         test('Status 404 for non-existant id', async () => {
@@ -72,10 +69,8 @@ describe('Test notes\' been init.', () => {
                 .send(newNote)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
-        
             const notesAtEnd = await helper.notesInDb()
             assert.strictEqual(notesAtEnd.length, helper.initNotes.length + 1)
-        
             const contents = notesAtEnd.map(n => n.content)
             assert(contents.includes('async/await is da way'))
         })
@@ -87,7 +82,6 @@ describe('Test notes\' been init.', () => {
                 .post('/api/notes')
                 .send(newNote)
                 .expect(400)
-        
             const notesAtEnd = await helper.notesInDb()
             assert.strictEqual(notesAtEnd.length, helper.initNotes.length)
         })
@@ -96,11 +90,9 @@ describe('Test notes\' been init.', () => {
         test('Deletion confirmed', async () => {
             const notesAtStart = await helper.notesInDb()
             const noteToDelete = notesAtStart[0]
-        
             await api
                 .delete(`/api/notes/${noteToDelete.id}`)
                 .expect(204)
-        
             const notesAtEnd = await helper.notesInDb()
             console.log(notesAtEnd)
             const contents = notesAtEnd.map(r => r.content)
