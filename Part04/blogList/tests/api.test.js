@@ -9,13 +9,14 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    const blogObjs = helper.test_blogs
-        // why did new Note({note}) work before? it doesn't work with brackets here!?
-        .map(blog => new Blog(blog)) 
-    // console.log(blogObjs[0])
-    const blogPromises = blogObjs
-        .map(blog => blog.save())
-    await Promise.all(blogPromises)
+    // const blogObjs = helper.test_blogs
+    //     // why did new Note({note}) work before? it doesn't work with brackets here!?
+    //     .map(blog => new Blog(blog)) 
+    // // console.log(blogObjs[0])
+    // const blogPromises = blogObjs
+    //     .map(blog => blog.save())
+    // await Promise.all(blogPromises)
+    await Blog.insertMany(helper.test_blogs)
 })
 
 test('total length of posts check', async () => {
@@ -75,7 +76,7 @@ test('"likes" property default check', async () => {
     // console.log(currentBlogs[currentBlogs.length - 1])
     assert.strictEqual(currentBlogs[currentBlogs.length - 1].likes, 0)
 })
-test.only('Bad request for no title and url', async () => {
+test('Bad request for no title and url', async () => {
     const testPosts = [
         {
             author: 'Tuna',
@@ -102,7 +103,48 @@ test.only('Bad request for no title and url', async () => {
     const currentBlogs = await helper.getAllBlogs()
     assert.strictEqual(currentBlogs.length, helper.test_blogs.length)
 })
-
+test('Delete test', async () => {
+    const initBlog = await helper.getAllBlogs()
+    const target = initBlog[0]
+    console.log(target)
+    await api
+        .delete(`/api/blogs/${target.id}`)
+        .expect(204)
+    const aftermath = await helper.getAllBlogs()
+    console.log(aftermath)
+    const titles = aftermath.map(b => b.title)
+    assert(!titles.includes(target.title))
+    assert.strictEqual(aftermath.length, initBlog.length - 1)
+})
+test('Get one id', async () => {
+    const initBlogs = await helper.getAllBlogs()
+    const target = initBlogs[0]
+    const result = await api
+        .get(`/api/blogs/${target.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    assert.deepStrictEqual(result.body, target)
+})
+test.only('Update test', async () => {
+    const initBlogs = await helper.getAllBlogs()
+    const target = initBlogs[0]
+    const tempBlog = new Blog({
+        title: "Update test",
+        author: "Update test",
+        url: "https://test.update",
+        likes: 567
+    })
+    const putResult = await api
+        .put(`/api/blogs/${target.id}`)
+        .send(tempBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    const getResult = await api
+        .get(`/api/blogs/${target.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    assert.deepStrictEqual(getResult.body, putResult.body)
+})
 after(async() => {
     await mongoose.connection.close()
 })

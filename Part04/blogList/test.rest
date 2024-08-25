@@ -2,10 +2,10 @@ POST http://localhost:3003/api/blogs/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "title": "REFACTOR_TEST",
-    "author": "REFACTOR_TEST",
-    "url": "REFACTOR_TEST",
-    "likes": 555
+    "title": "UPDATE_TEST",
+    "author": "UPDATER",
+    "url": "http://me.me",
+    "likes": 3
 }
 
 ###
@@ -13,3 +13,14 @@ GET http://localhost:3003/api/blogs/ HTTP/1.1
 
 ### unknown endpoint test
 GET http://localhost:3003/api/blabla/ HTTP/1.1
+
+### update test
+PUT http://localhost:3003/api/blogs/66ca9d0c137ce10e3d41a121 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "UPDATED 3 likes to 300",
+    "author": "UPDATED UPDATER",
+    "url": "http://up-to-date.url",
+    "likes": 300
+}
