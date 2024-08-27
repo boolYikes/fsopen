@@ -18,5 +18,15 @@ usersRouter.post('/', async (req, res) => {
 
     res.status(201).json(savedUser)
 })
+usersRouter.get('/', async (req, res) => {
+    const users = await User
+        .find({}).populate('notes', { content: 1, important: 1})
+    res.json(users)
+})
+// Temporary router for resetting
+// usersRouter.delete('/', async (req, res) => {
+//     await User.deleteMany({})
+//     res.status(204).end()
+// })
 
 module.exports = usersRouter

@@ -1,5 +1,6 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
+const User = require('../models/user')
 // nexts and try-catch are not needed cuz of the express-async-errors lib
 
 notesRouter.get('/', async (request, response) => {
@@ -33,12 +34,25 @@ notesRouter.put('/:id', (request, response, next) => {
 })
 notesRouter.post('/', async (request, response) => {
     const body = request.body
+
+    const user = await User.findById(body.userId)
+
     const note = new Note({
         content: body.content,
-        important: body.important || false,
+        important: body.important === undefined ? false : body.important,
+        user: user.id
     })
     const savedNote = await note.save()
+
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+
     response.status(201).json(savedNote) // 201 stands for CREATED
 })
+// temp router for resetting
+// notesRouter.delete('/', async (req, res) => {
+//     await Note.deleteMany({})
+//     res.status(204).end()
+// })
 
 module.exports = notesRouter
