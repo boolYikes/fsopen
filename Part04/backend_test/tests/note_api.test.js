@@ -1,5 +1,7 @@
 const { test, after, describe, beforeEach } = require('node:test')
 const Note = require('../models/note')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const helper = require('./test_helper')
@@ -100,6 +102,52 @@ describe('Test notes\' been init.', () => {
             console.log('init length:', helper.initNotes.length)
             assert.strictEqual(notesAtEnd.length, helper.initNotes.length - 1)
         })
+    })
+})
+
+describe.only('User admin tests', () => {
+    beforeEach(async () => {
+        await User.deleteMany({})
+        const passwordHash = await bcrypt.hash('sekret', 10)
+        const user = new User({ username: 'root', passwordHash })
+        await user.save()
+    })
+    test('Given one init user present in DB', async () => {
+        const usersAtStart = await helper.usersInDb()
+        const newUser = {
+            username: 'mluukkai',
+            name: 'Matti Luukkainen',
+            password: 'salainen',
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+
+        const usernames = usersAtEnd.map(u => u.username)
+        assert(usernames.includes(newUser.username))
+    })
+    test.only('creation fails properly if username already is taken', async () => {
+        const usersAtStart = await helper.usersInDb()
+        const newUser = {
+            username: 'root',
+            name: 'Superuser',
+            password: 'salainen'
+        }
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('expected `username` to be unique'))
+
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
 })
 
