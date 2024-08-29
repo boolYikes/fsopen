@@ -1,4 +1,3 @@
-const { response } = require('../app')
 const logger = require('./logger')
 const requestLogger = (request, response, next) => {
     logger.info('Method:', request.method)
@@ -18,6 +17,8 @@ const errorHandler = (error, req, res, next) => {
         return res.status(400).json({ error: error.message })
     }else if (error.code === 11000) {
         return res.status(400).json({ error: 'expected `username` to be unique' })
+    }else if (error.name === 'JsonWebTokenError') {
+        return res.status(401).json({ error: 'token invalid'})
     }
     next(error)
 }

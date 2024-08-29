@@ -1,7 +1,15 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 // nexts and try-catch are not needed cuz of the express-async-errors lib
+
+const getTokenFrom = req => {
+    const auth = req.get('authorization')
+    if (auth && auth.startsWith('Bearer ')) {
+        return auth.replace('Bearer ', '')
+    }
+}
 
 notesRouter.get('/', async (request, response) => {
     const notes = await Note.find({})
@@ -34,8 +42,13 @@ notesRouter.put('/:id', (request, response, next) => {
 })
 notesRouter.post('/', async (request, response) => {
     const body = request.body
-
-    const user = await User.findById(body.userId)
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SEKRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+    }
+    // console.log(`decoded token: ${decodedToken}`)
+    const user = await User.findById(decodedToken.id)
+    // const user = await User.findById(body.userId)
 
     const note = new Note({
         content: body.content,
