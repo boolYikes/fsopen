@@ -11,14 +11,34 @@ const api = supertest(app)
 
 describe('Test notes\' been init.', () => {
     beforeEach(async() => {
+        await User.deleteMany({})
         await Note.deleteMany({})
-        // const noteObjs = helper.initNotes
-        //     .map(note => new Note(note)) // now it works with just "note", not "{note}" unlike before...
-        // const noteSavePromises = noteObjs
-        //     .map(note => note.save())
-        // await Promise.all(noteSavePromises) // prevents async overtakes within a loop
-        // // OR
-        await Note.insertMany(helper.initNotes)
+
+        let userObj = helper.initUsers[0]
+        const salt = 5
+        const hash = await bcrypt.hash(userObj.password, salt)
+        userObj = new User({
+            username: userObj.username,
+            user: userObj.name,
+            passwordHash: hash
+        })
+        await userObj.save()
+        // we can't log both in... so let's only do one of them
+        const testers = await helper.usersInDb()
+        // console.log(token)
+        let noteObjs = helper.initNotes
+            .map(note => {
+                note.user = testers[0].id
+            })
+        // console.log(`Notes are now: ${noteObjs}`)
+        noteObjs = helper.initNotes
+            .map(note => new Note(note)) // now it works with just "note", not "{note}" unlike before...
+        const noteSavePromises = noteObjs
+            .map(note => note.save())
+        await Promise.all(noteSavePromises) // prevents async overtakes within a loop
+
+        // populate
+        await api.get('/api/users')
     })
     describe('Get tests', () => {
         test('Notes are returned as JSON', async() => {
@@ -45,6 +65,7 @@ describe('Test notes\' been init.', () => {
                 .get(`/api/notes/${noteToView.id}`)
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
+            console.log(`query res: ${queryResult.body}`)
             assert.deepStrictEqual(queryResult.body, noteToView)
         })
         test('Status 404 for non-existant id', async () => {
@@ -62,12 +83,18 @@ describe('Test notes\' been init.', () => {
     })
     describe('Add record tests', () => {
         test('A valid note can be added?', async() => {
+            let userObj = helper.initUsers[0]
+            const authResponse = await api
+                .post('/api/login')
+                .send({ username:userObj.username, password:userObj.password })
+            const token = authResponse.body.token
             const newNote = {
                 content: 'async/await is da way',
                 important: true,
             }
             await api
                 .post('/api/notes')
+                .set('authorization', `Bearer ${token}`)
                 .send(newNote)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -77,11 +104,17 @@ describe('Test notes\' been init.', () => {
             assert(contents.includes('async/await is da way'))
         })
         test('Status 400 for schema criteria not met.', async() => {
+            let userObj = helper.initUsers[0]
+            const authResponse = await api
+                .post('/api/login')
+                .send({ username:userObj.username, password:userObj.password })
+            const token = authResponse.body.token
             const newNote = {
-                important: true
+                important: true,
             }
             await api
                 .post('/api/notes')
+                .set('authorization', `Bearer ${token}`)
                 .send(newNote)
                 .expect(400)
             const notesAtEnd = await helper.notesInDb()
@@ -105,7 +138,7 @@ describe('Test notes\' been init.', () => {
     })
 })
 
-describe.only('User admin tests', () => {
+describe('User admin tests', () => {
     beforeEach(async () => {
         await User.deleteMany({})
         const passwordHash = await bcrypt.hash('sekret', 10)

@@ -5,6 +5,10 @@ const initNotes = [
     { content: 'HTML is easay', important:false },
     { content: 'Instructions on Mongo.js is unclear', important:true }
 ]
+const initUsers = [
+    { username: 'dee', name: 'Dee', password: 'dee' },
+    { username: 'test', name: 'Test', password: 'test' }
+]
 
 const nonExistingId = async () => {
     const note = new Note({ content: 'willremovethissoon' })
@@ -24,5 +28,5 @@ const usersInDb = async () => {
 }
 
 module.exports = {
-    initNotes, nonExistingId, notesInDb, usersInDb
+    initNotes, initUsers, nonExistingId, notesInDb, usersInDb
 }
