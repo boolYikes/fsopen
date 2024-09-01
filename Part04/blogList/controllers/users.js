@@ -19,9 +19,22 @@ usersRouter.post('/', async (req, res, next) => {
         const savedUser = await user.save()
         res.status(201).json(savedUser)
 })
-usersRouter.get('/', async (req, res) => {
-    const allUsers = await User.find({})
+usersRouter.delete('/', async (req, res) => {
+    await User.deleteMany({})
+    res.status(204).end()
+})
+usersRouter.get('/', async (req, res, next) => {
+    const allUsers = await User.find({}).populate('blogs', { title: 1, author: 1, url: 1, likes: 1 })
     res.json(allUsers)
+})
+usersRouter.put('/:id', async (req, res) => {
+    const { username, name, password, blogs } = req.body
+    const updated = await User.findByIdAndUpdate(
+        req.params.id,
+        { username, name, password, blogs },
+        { new: true, runValidators: true, context: 'query' }
+    )
+    res.json(updated)
 })
 
 module.exports = usersRouter
