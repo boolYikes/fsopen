@@ -14,6 +14,8 @@ const errorHandler = (err, req, res , next) => {
         return res.status(400).send('err: Malformed ID')
     } else if (err.name === 'ValidationError') {
         return res.status(400).json({ error: err.message })
+    } else if (err.code === 11000) {
+        return res.status(400).json({ error: 'The username is not unique.'})
     }
     next(err)
 }

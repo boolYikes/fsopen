@@ -1,6 +1,7 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const supertest = require('supertest')
 const helper = require('./list_helper')
 const assert = require('node:assert')
@@ -9,6 +10,7 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
+    await User.deleteMany({})
     // const blogObjs = helper.test_blogs
     //     // why did new Note({note}) work before? it doesn't work with brackets here!?
     //     .map(blog => new Blog(blog)) 
@@ -18,7 +20,6 @@ beforeEach(async () => {
     // await Promise.all(blogPromises)
     await Blog.insertMany(helper.test_blogs)
 })
-
 test('total length of posts check', async () => {
     const allBlogs = await api.get('/api/blogs')
     // console.log(allBlogs.body)
@@ -125,7 +126,7 @@ test('Get one id', async () => {
         .expect('Content-Type', /application\/json/)
     assert.deepStrictEqual(result.body, target)
 })
-test.only('Update test', async () => {
+test('Update test', async () => {
     const initBlogs = await helper.getAllBlogs()
     const target = initBlogs[0]
     const tempBlog = new Blog({
@@ -144,6 +145,61 @@ test.only('Update test', async () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
     assert.deepStrictEqual(getResult.body, putResult.body)
+})
+describe.only('User related tests', () => {
+    test('Short password POST test', async () => {
+        const invalid = {
+            username: "invalid_one",
+            name: "this_shall_not_pass",
+            password: ""
+        }
+        const error = await api
+            .post('/api/users')
+            .send(invalid)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        assert.deepStrictEqual(error.body.error, "Password length too short")
+    })
+    test('Null password POST test', async () => {
+        const invalid = {
+            username: "invalid_one",
+            name: "this_shall_not_pass",
+        }
+        const error = await api
+            .post('/api/users')
+            .send(invalid)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        assert.deepStrictEqual(error.body.error, "Invalid password")
+    })
+    test('Username validation: length', async () => {
+        const invalid = {
+            username: "no",
+            name: "this_shall_not_pass",
+            password: "12345678"
+        }
+        const error = await api
+            .post('/api/users')
+            .send(invalid)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        assert(error.body.error.includes('minimum allowed length'))
+    })
+    test.only('Username validation: unique', async () => {
+        const userX = {
+            username: "test1",
+            name: "test1",
+            password: "12345678"
+        }
+        await api.post('/api/users').send(userX).expect(201)
+        const dupeUser = {
+            username: "test1",
+            name: "test2",
+            password: "23456789"
+        }
+        const error = await api.post('/api/users').send(dupeUser).expect(400)
+        assert(error.body.error.includes('unique'))
+    })
 })
 after(async() => {
     await mongoose.connection.close()

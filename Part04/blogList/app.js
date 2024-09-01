@@ -1,3 +1,4 @@
+require('express-async-errors') // this goes on top or it can't catch errors
 const express = require('express')
 const app = express()
 const cors = require('cors')
