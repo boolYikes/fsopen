@@ -10,6 +10,8 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3003/api/blogs/ HTTP/1.1
+###
+GET http://localhost:3003/api/users/ HTTP/1.1
 
 ### unknown endpoint test
 GET http://localhost:3003/api/blabla/ HTTP/1.1
@@ -35,3 +37,21 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3003/api/users HTTP/1.1
+###
+POST http://localhost:3003/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "dee",
+    "password": "dee"
+}
+###
+POST http://localhost:3003/api/blogs HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlZSIsImlkIjoiNjZkMmQ3OGY4YThkYjI2ODlhOWU2YjY5IiwiaWF0IjoxNzI1MzIzNTYxLCJleHAiOjE3MjUzMjcxNjF9.TS4TpM3W5jtlnp0DU8_RgrogfDtsrdKRPJHLehni66o
+
+{
+    "title": "The author is now user.name",
+    "url": "http://auth.ai",
+    "likes": 5
+}
