@@ -24,6 +24,7 @@ mongoose.connect(mongoUrl)
 app.use(cors())
 // app.use(express.static('dist'))
 app.use(express.json())
+app.use(middleware.tokenExtractor) // let's log the token too
 app.use(middleware.requestLogger)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)

@@ -3,14 +3,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-const getTokenFrom = req => {
-    const auth = req.get('authorization')
-    if (auth && auth.startsWith('Bearer ')) {
-        return auth.replace('Bearer ', '')
-    }
-    return null
-}
-
 blogsRouter.get('/', async (req, res) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1})
     res.json(blogs)
@@ -25,7 +17,7 @@ blogsRouter.get('/:id', async (req, res) => {
 })
 blogsRouter.post('/', async (req, res) => {
     // auth
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SEKRET)
+    const decodedToken = jwt.verify(req.token, process.env.SEKRET)
     if (!decodedToken.id) {
         return res.status(401).json({ error: 'token invalid' })
     }
@@ -43,13 +35,25 @@ blogsRouter.post('/', async (req, res) => {
     savedBlog.populate('user', { username: 1, name: 1 })
     res.status(201).json(savedBlog)
 })
-blogsRouter.delete('/', async (req, res) => {
-    await Blog.deleteMany({})
-    res.status(204).end()
-})
+// blogsRouter.delete('/', async (req, res) => {
+//     // this is for resetting db
+//     await Blog.deleteMany({})
+//     res.status(204).end()
+// })
 blogsRouter.delete('/:id', async (req, res) => {
-    await Blog.findByIdAndDelete(req.params.id)
-    res.status(204).end()
+    const decodedToken = jwt.verify(req.token, process.env.SEKRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
+    const targetBlog = await Blog.findById(req.params.id)
+    const targetUserId = targetBlog.user.toString()
+    if (targetUserId === decodedToken.id) {
+        const deleteResult = await Blog.findByIdAndDelete(req.params.id)
+        // console.log(`This was deleted: ${deleteResult}`)
+        res.status(204).end()
+    } else {
+        res.status(401).json({ error: 'That\'s not your blog!' })
+    }
 })
 blogsRouter.put('/:id', async (req, res, next) => {
     const { title, author, likes, url } = req.body
