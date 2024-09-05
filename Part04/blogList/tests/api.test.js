@@ -11,21 +11,16 @@ const api = supertest(app)
 beforeEach(async () => {
     await Blog.deleteMany({})
     await User.deleteMany({})
-    // const blogObjs = helper.test_blogs
-    //     // why did new Note({note}) work before? it doesn't work with brackets here!?
-    //     .map(blog => new Blog(blog)) 
-    // // console.log(blogObjs[0])
-    // const blogPromises = blogObjs
-    //     .map(blog => blog.save())
-    // await Promise.all(blogPromises)
-    await Blog.insertMany(helper.test_blogs)
+    
+    await Blog.insertMany(helper.test_blogs) // for unit tests
+
 })
-test('total length of posts check', async () => {
+test('Total length of posts check', async () => {
     const allBlogs = await api.get('/api/blogs')
     // console.log(allBlogs.body)
     assert.strictEqual(allBlogs.body.length, helper.test_blogs.length)
 })
-test('id field as "id" check', async () => {
+test('ID field as "id" check', async () => {
     const allBlogs = await api.get('/api/blogs')
     const check = allBlogs.body.map(blog => {
         if ('id' in blog) {
@@ -39,16 +34,24 @@ test('id field as "id" check', async () => {
         , helper.test_blogs.length
     )
 })
-test('add post check', async () => {
-    const testPost = {
-        title: 'Add post test',
-        author: 'Tuna',
-        url: 'https://dees.kr',
-        likes: 1
-    }
+test('Add a post check', async () => {
+    const user = helper.testUsers[0] // tester 1
     await api
+        .post('/api/users')
+        .send(user)
+    const theTokened = await api
+        .post('/api/login')
+        .send({ username:user.username, password:user.password })
+    // console.log(`tokened one: ${theTokened.body.token}`)
+    const blog = helper.testBlogsForAuth[0]
+    const queryResult = await api
         .post('/api/blogs')
-        .send(testPost)
+        .auth(theTokened.body.token, { type: 'bearer'})
+        .send({
+            title: blog.title,
+            url: blog.url,
+            likes: blog.likes
+        })
         .expect(201)
         .expect('Content-Type', /application\/json/)
     const currentPosts = await helper.getAllBlogs()
@@ -60,16 +63,41 @@ test('add post check', async () => {
         url: lastPost.url,
         likes: lastPost.likes
     }
-    assert.deepStrictEqual(content, testPost)
+    assert.deepStrictEqual(
+        content,
+        { 
+            title: queryResult.body.title,
+            author: queryResult.body.author, 
+            url: queryResult.body.url, 
+            likes: queryResult.body.likes}
+    )
+})
+test.only('Posting without a token check', async () => {
+    const testBlog = helper.test_blogs[0]
+    const initBlogs = await helper.getAllBlogs()
+    await api
+        .post('/api/blogs')
+        .send(testBlog)
+        .expect(401)
+    const aftermath = await helper.getAllBlogs()
+    assert.strictEqual(initBlogs.length, aftermath.length)
 })
 test('"likes" property default check', async () => {
+    const user = helper.testUsers[0] // tester 1
+    await api
+        .post('/api/users')
+        .send(user)
+    const theTokened = await api
+        .post('/api/login')
+        .send({ username:user.username, password:user.password })
     const testPost = {
-        title: "This is missing likes prop",
+        title: "This is missing the 'likes' prop",
         author: "Sloppy doug",
         url: "http://dontlivelikeme.com"
     }
     await api
         .post("/api/blogs")
+        .auth(theTokened.body.token, { type: 'bearer' })
         .send(testPost)
         .expect(201)
         .expect("Content-Type", /application\/json/)
@@ -78,24 +106,29 @@ test('"likes" property default check', async () => {
     assert.strictEqual(currentBlogs[currentBlogs.length - 1].likes, 0)
 })
 test('Bad request for no title and url', async () => {
+    const user = helper.testUsers[0] // tester 1
+    await api
+        .post('/api/users')
+        .send(user)
+    const theTokened = await api
+        .post('/api/login')
+        .send({ username:user.username, password:user.password })
     const testPosts = [
         {
-            author: 'Tuna',
             likes: 2
         },
         {
             title: 'No url',
-            author: 'Tuna',
             likes: 1
         },
         {
             url: 'http://notitle.org',
-            author: 'Tuna',
         }
     ]
     const testPromises = testPosts.map(async (post) => {
         await api
             .post('/api/blogs')
+            .auth(theTokened.body.token, { type: 'bearer' })
             .send(post)
             .expect(400)
     })
@@ -105,16 +138,32 @@ test('Bad request for no title and url', async () => {
     assert.strictEqual(currentBlogs.length, helper.test_blogs.length)
 })
 test('Delete test', async () => {
-    const initBlog = await helper.getAllBlogs()
-    const target = initBlog[0]
-    console.log(target)
+    const user = helper.testUsers[0] // tester 1
     await api
-        .delete(`/api/blogs/${target.id}`)
+        .post('/api/users')
+        .send(user)
+    const theTokened = await api
+        .post('/api/login')
+        .send({ username:user.username, password:user.password })
+    const blog = helper.testBlogsForAuth[0]
+    const queryResult = await api
+        .post('/api/blogs')
+        .auth(theTokened.body.token, { type: 'bearer'})
+        .send({
+            title: blog.title,
+            url: blog.url,
+            likes: blog.likes
+        })
+    const initBlog = await helper.getAllBlogs()
+    // console.log(queryResult.body.id)
+    await api
+        .delete(`/api/blogs/${queryResult.body.id}`)
+        .auth(theTokened.body.token, { type: 'bearer' })
         .expect(204)
     const aftermath = await helper.getAllBlogs()
-    console.log(aftermath)
+    // console.log(aftermath)
     const titles = aftermath.map(b => b.title)
-    assert(!titles.includes(target.title))
+    assert(!titles.includes(blog.title))
     assert.strictEqual(aftermath.length, initBlog.length - 1)
 })
 test('Get one id', async () => {
@@ -146,7 +195,7 @@ test('Update test', async () => {
         .expect('Content-Type', /application\/json/)
     assert.deepStrictEqual(getResult.body, putResult.body)
 })
-describe.only('User related tests', () => {
+describe('User related tests', () => {
     test('Short password POST test', async () => {
         const invalid = {
             username: "invalid_one",
@@ -185,7 +234,7 @@ describe.only('User related tests', () => {
             .expect('Content-Type', /application\/json/)
         assert(error.body.error.includes('minimum allowed length'))
     })
-    test.only('Username validation: unique', async () => {
+    test('Username validation: unique', async () => {
         const userX = {
             username: "test1",
             name: "test1",

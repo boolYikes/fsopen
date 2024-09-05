@@ -34,13 +34,13 @@ Content-Type: application/json
 ### blog post test
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRlZSIsImlkIjoiNjZkMmQ3OGY4YThkYjI2ODlhOWU2YjY5IiwiaWF0IjoxNzI1NDEzODI5LCJleHAiOjE3MjU0MTc0Mjl9.ek1_LeHnEUx0HXafztSoZxHEm_o_brnbkW21dMkHw14
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2ZDJkOTMzNWI4OTE4ZTc0OTNmMDVmYiIsImlhdCI6MTcyNTUwNzU4NywiZXhwIjoxNzI1NTExMTg3fQ.2UkT7c2nhkOL9M9epmGO_T-xXA-X9WQ40iFMdBq5p70
 
 {
-    "title": "For authorized deletion test",
-    "url": "http://deletewith.auth",
-    "likes": 11
+    "title": "final test before submission",
+    "url": "http://part04.goodbye",
+    "likes": 2
 }
 ### delete test
-DELETE http://localhost:3003/api/blogs/66d4f80a9abd77fc21b42b3f HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2ZDJkOTMzNWI4OTE4ZTc0OTNmMDVmYiIsImlhdCI6MTcyNTQxNTUwNiwiZXhwIjoxNzI1NDE5MTA2fQ.jkGsoDv_pWVkFp5j5qGiztl7_3_MGjgRCvrwlP-XeF8
+DELETE http://localhost:3003/api/blogs/66d9102293ccdae2d860fcc3 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2ZDJkOTMzNWI4OTE4ZTc0OTNmMDVmYiIsImlhdCI6MTcyNTUwMTQzNywiZXhwIjoxNzI1NTA1MDM3fQ.sG0JGu6z4coEFUF1N1vU-3kb9AaE10bWd8dq9bVvHu0

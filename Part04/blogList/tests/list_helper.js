@@ -1,5 +1,30 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
+const testUsers = [
+    {
+        username: 'test1',
+        name: 'tester1',
+        password: 'test1'
+    },
+    {
+        username: 'test2',
+        name: 'tester2',
+        password: 'test2'
+    }
+]
+const testBlogsForAuth = [
+    {
+        title: 'tester1\'s blog',
+        url: 'http://test1.nope',
+        likes: 5
+    },
+    {
+        title: 'tester2\'s blog',
+        url: 'http://test2.nope',
+        likes: 1
+    }
+]
 const test_blogs = [
     {
         title: 'Go To Statement Considered Harmful',
@@ -77,6 +102,8 @@ const getAllBlogs = async () => {
 
 module.exports = {
     test_blogs,
+    testUsers,
+    testBlogsForAuth,
     dummy,
     totalLikes,
     favoriteBlog,
