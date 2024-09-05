@@ -1,4 +1,5 @@
 const blogsRouter = require('express').Router()
+const middleware = require('../utils/middleware')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
@@ -15,21 +16,16 @@ blogsRouter.get('/:id', async (req, res) => {
         res.status(404).end()
     }
 })
-blogsRouter.post('/', async (req, res) => {
+blogsRouter.post('/', middleware.userExtractor, async (req, res) => {
     // auth
-    const decodedToken = jwt.verify(req.token, process.env.SEKRET)
-    if (!decodedToken.id) {
-        return res.status(401).json({ error: 'token invalid' })
-    }
-    const user = await User.findById(decodedToken.id)
-    
+    const user = req.user
     const body = req.body
     const blog = new Blog({
         title: body.title,
         author: user.name,
         url: body.url,
         likes: body.likes,
-        user: user._id
+        user: user._id // this is an object and it's supposed to be an object
     })
     const savedBlog = await blog.save()
     savedBlog.populate('user', { username: 1, name: 1 })
@@ -40,14 +36,12 @@ blogsRouter.post('/', async (req, res) => {
 //     await Blog.deleteMany({})
 //     res.status(204).end()
 // })
-blogsRouter.delete('/:id', async (req, res) => {
-    const decodedToken = jwt.verify(req.token, process.env.SEKRET)
-    if (!decodedToken.id) {
-        return res.status(401).json({ error: 'token invalid' })
-    }
+blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
+    const user = req.user
     const targetBlog = await Blog.findById(req.params.id)
     const targetUserId = targetBlog.user.toString()
-    if (targetUserId === decodedToken.id) {
+    // console.log(`targetblog user: ${targetUserId}, currUser: ${user._id}`)
+    if (targetUserId === user._id.toString()) { // convert for hard comparison
         const deleteResult = await Blog.findByIdAndDelete(req.params.id)
         // console.log(`This was deleted: ${deleteResult}`)
         res.status(204).end()
