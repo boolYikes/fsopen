@@ -51,5 +51,6 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex4.3-4.7 blog list</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex4.8-4.12 blog list tests</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex4.13-4.14 blog list expansions</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex4.15-4.23 blog list expansions</a></li>
     </ul>
 </details>
