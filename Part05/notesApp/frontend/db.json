@@ -1,0 +1,74 @@
+{
+  "notes": [
+    {
+      "id": "1",
+      "content": "HTML is easy",
+      "important": false
+    },
+    {
+      "id": "2",
+      "content": "Browser can execute only JavaScript",
+      "important": false
+    },
+    {
+      "id": "3",
+      "content": "GET and POST are the most important concept of HTTP protocol",
+      "important": true
+    },
+    {
+      "id": "4",
+      "content": "API is the coolest thing in the world",
+      "important": false
+    },
+    {
+      "id": "5",
+      "content": "Bootstrap is the laziest necessary evil!",
+      "important": false
+    },
+    {
+      "id": "6",
+      "content": "SQL is the backbone of a web project",
+      "important": true
+    },
+    {
+      "id": "7",
+      "content": "But without frontend, it'll look like stone age",
+      "important": false
+    },
+    {
+      "id": "8",
+      "content": "This conversation is over",
+      "important": false
+    },
+    {
+      "id": "9",
+      "content": "Noooooooooooo",
+      "important": false
+    },
+    {
+      "id": "96ad",
+      "content": "ya[",
+      "important": false
+    },
+    {
+      "id": "2e3e",
+      "content": "jaaar",
+      "important": false
+    },
+    {
+      "id": "6665",
+      "content": "UWU",
+      "important": false
+    },
+    {
+      "id": "80ad",
+      "content": "yap",
+      "important": true
+    },
+    {
+      "id": "50af",
+      "content": "asdf",
+      "important": false
+    }
+  ]
+}

@@ -54,3 +54,9 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex4.15-4.23 blog list expansions</a></li>
     </ul>
 </details>
+<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part05">Part 5</a></h2>
+<details>
+    <summary><span style="color:salmon">Expand to see</span></summary>
+    <ul>
+    </ul>
+</details>

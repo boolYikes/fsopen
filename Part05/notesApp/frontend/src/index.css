@@ -1,0 +1,27 @@
+h1 {
+    color:palevioletred;
+    font-style: italic;
+    font-size: 3em;
+}
+
+.note{
+    color:darkgreen;
+    padding-top:3px;
+    font-size: 1.5em;
+}
+#showButton{
+    background-color: aquamarine;
+}
+.impToggle{
+    background-color: pink;
+    color:black;
+}
+.error{
+    color: red;
+    background: lightblue;
+    font-size:20px;
+    border-style:solid;
+    border-radius: 5px;
+    padding:10px;
+    margin-bottom: 10px;
+}
