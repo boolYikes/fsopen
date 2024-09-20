@@ -60,6 +60,7 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -114,8 +115,7 @@ const App = () => {
       {user === null
         ? loginForm()
         : <div>
-            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}!
-            </p>
+            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}!</p>
             {noteForm()}
           </div>
       }
