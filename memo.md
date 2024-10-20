@@ -1,3 +1,4 @@
+### This memo.md is inside /lab/dee/fsopen
 # Node
 - npm create vite@latest [PROJNAME] -- --template react for react proj.
 # Json Server
@@ -14,4 +15,7 @@
 - npm install eslint @eslint/js --save-dev
 - npm install --save-dev @stylistic/eslint-plugin-js
 - npx eslint --init
+# Python
+## Jupyter
+- add venv to kernel list: python -m ipykernel install --user --name=myenv --display-name "Python (myenv)"
 # temp memo
