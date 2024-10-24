@@ -14,6 +14,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  // hook one
   const hook = () => {
     // console.log('effect')
     noteService
@@ -23,6 +24,18 @@ const App = () => {
       })
   }
   useEffect(hook, [])
+
+  // hook for user session retrieval
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, []) // empty list = execute hook when the component is rendered for the first time
+  // for now, to log out, use window.localStorage.removeItem('loggedNoteappUser') or .clear()
+
   // console.log('render', notes.length, 'notes ')
   const loginForm = () => ( // shorthand for { return (...) }
     <form onSubmit={handleLogin}>
@@ -60,6 +73,9 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      )
       noteService.setToken(user.token)
       setUser(user)
       setUsername('')
