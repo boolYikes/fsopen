@@ -28,6 +28,10 @@ const App = () => {
     }
   }, [])
 
+  const refreshBlogs = (newBlog) => {
+    setBlogs([...blogs, newBlog])
+  } // for refreshing after creation
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -66,7 +70,8 @@ const App = () => {
   }
   return (
     <div>
-      <Message message={errorMessage}/>asdf
+      <h1>The King of Brutalism</h1>
+      <Message message={errorMessage}/>
       {!user ? 
       <div>
         <h2>You shall not pass!</h2>
@@ -92,7 +97,7 @@ const App = () => {
             <button type='submit'>login</button>
         </form>
       </div>
-      : <Content blogs={blogs} logout={handleLogout}/>}
+      : <Content blogs={blogs} logout={handleLogout} username={user.username} addBlog={refreshBlogs}/>}
     </div>
   )
 }
