@@ -11,7 +11,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState([])
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -30,6 +30,10 @@ const App = () => {
 
   const refreshBlogs = (newBlog) => {
     setBlogs([...blogs, newBlog])
+    setMessage([`Created ${newBlog.title} by ${user.username}`, 'success'])
+    setTimeout(() => {
+      setMessage([])
+    }, 3000)
   } // for refreshing after creation
 
   const handleLogin = async (event) => {
@@ -43,12 +47,16 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
+      setMessage([`Welcome ${username}!!`, 'success'])
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      setErrorMessage('Invalid credential given.')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage([])
+      }, 3000)
+    } catch (exception) {
+      setMessage(['Invalid credential given.', 'error'])
+      setTimeout(() => {
+        setMessage([])
       }, 3000)
     }
   }
@@ -62,16 +70,16 @@ const App = () => {
       setUser(user)
       // window.localStorage.clear()
     } catch (exception) { // is this necessary?
-      setErrorMessage('Something went wrong during logout.')
+      setMessage(['Something went wrong during logout.', 'error'])
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage([])
       }, 3000)
     }
   }
   return (
     <div>
       <h1>The King of Brutalism</h1>
-      <Message message={errorMessage}/>
+      <Message message={message}/>
       {!user ? 
       <div>
         <h2>You shall not pass!</h2>

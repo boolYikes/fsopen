@@ -1,7 +1,7 @@
 import blogsService from '../services/blogs'
 import { useState } from 'react'
 
-const PostingForm = ({ addBlog }) => {
+const PostingForm = ({ addBlog }) => { // is handling state here a good idea?
     const [formData, setFormData] = useState({
         title: '',
         author: '',
