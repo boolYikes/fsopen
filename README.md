@@ -58,6 +58,6 @@
 <details>
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part05/bloglist-frontend">Ex5.1-5.3 blog front</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part05/bloglist-frontend">Ex5.1-5.4 blog front</a></li>
     </ul>
 </details>
