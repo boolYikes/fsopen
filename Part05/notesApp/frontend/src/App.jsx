@@ -54,7 +54,7 @@ const App = () => {
             password={password}
             handleUsernameChange={({ target }) => setUsername(target.value)}
             handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
+            handleLogin={handleLogin}
           />
           <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
@@ -125,6 +125,10 @@ const App = () => {
     setNewNote(event.target.value)
   }
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
+  const handleLogout = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
   return (
     <div>
       <h1>Notes</h1>
@@ -132,7 +136,7 @@ const App = () => {
       {user === null
         ? loginForm()
         : <div>
-            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}!</p>
+            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}! <button onClick={handleLogout}>logout</button></p>
             {noteForm()}
           </div>
       }
