@@ -1,3 +1,4 @@
+<p><strong>Will try to branch out from Part06 :P</strong></p>
 <h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part00">Part 0</a></h2>
 <details>
     <summary><span style="color:salmon">Expand to see</span></summary>
