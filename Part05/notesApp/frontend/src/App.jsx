@@ -1,5 +1,6 @@
 import Note from './components/Note'
 import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
 import Notification from './components/Notification'
 import { useState, useEffect } from 'react'
 import noteService from './services/notes'
@@ -15,7 +16,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
 
   // hook one
   const hook = () => {
@@ -144,10 +144,16 @@ const App = () => {
               handleLogin={handleLogin}
             />
           </Togglable>
-        : <div>
-            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}! <button onClick={handleLogout}>logout</button></p>
-            {noteForm()}
-          </div>
+        : <Togglable buttonLabel='new note'>
+            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}!
+              <button onClick={handleLogout}>logout</button>
+            </p>
+            <NoteForm
+              onSubmit={addNote}
+              value={newNote}
+              handleChange={handleNoteChange}
+            />
+          </Togglable>
       }
       <div>
         <button id='showButton' onClick={() => setShowAll(!showAll)}>
