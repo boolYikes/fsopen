@@ -2,7 +2,7 @@ import Note from './components/Note'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Notification from './components/Notification'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import noteService from './services/notes'
 import loginService from './services/login'
 import Togglable from './components/Tobblable'
@@ -10,12 +10,12 @@ import './index.css'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const noteFormRef = useRef()
 
   // hook one
   const hook = () => {
@@ -59,6 +59,7 @@ const App = () => {
       }, 4000)
     }
   }
+
   const addNote = (noteObject) => {
     noteService
       .create(noteObject)
@@ -66,6 +67,15 @@ const App = () => {
         setNotes(notes.concat(returnedNote))
       })
   }
+  const noteForm = () => (
+    <Togglable buttonLabel='new note' ref={noteFormRef}>
+      <p>Welcome, {user.name === undefined ? "user" : user.name}!
+        <button onClick={handleLogout}>logout</button>
+      </p>
+      <NoteForm createNote={addNote}/>
+    </Togglable>
+  )
+
   const toggleImportanceOf = id => {
     // const url = `http://localhost:3001/notes/${id}`
     const note = notes.find(n => n.id === id)
@@ -84,10 +94,7 @@ const App = () => {
         setNotes(notes.filter(n => n.id !== id))
       })
   }
-  const handleNoteChange = (event) => {
-    // console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
+
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
   const handleLogout = () => {
     window.localStorage.clear()
@@ -107,16 +114,7 @@ const App = () => {
               handleLogin={handleLogin}
             />
           </Togglable>
-        : <Togglable buttonLabel='new note'>
-            <p>Welcome, {user.name === undefined ? "Blabla" : user.name}!
-              <button onClick={handleLogout}>logout</button>
-            </p>
-            <NoteForm
-              onSubmit={addNote}
-              value={newNote}
-              handleChange={handleNoteChange}
-            />
-          </Togglable>
+        : noteForm()
       }
       <div>
         <button id='showButton' onClick={() => setShowAll(!showAll)}>
