@@ -5,16 +5,13 @@ const Togglable = (props) => {
     // pass the form and label
     return (
         <>
-            {/* Division of labor! This should not be here */}
-            <Button onClick={props.logout} buttonLabel='logout'/>
-
             <div style={props.hide}>
-                <Button onClick={props.toggle} buttonLabel={props.buttonLabel}/>
+                <Button onClick={props.toggle} buttonLabel={props.buttonLabel1}/>
             </div>
 
             <div style={props.show}>
                 {props.children} 
-                <Button onClick={props.toggle} buttonLabel='cancel'/>
+                <Button onClick={props.toggle} buttonLabel={props.buttonLabel2}/>
                 {/* Hello, {props.username}! <button onClick={props.logout}>logout</button>
                 {props.username ? <PostingForm addBlog={props.addBlog}/> : <br/>} */}
             </div>

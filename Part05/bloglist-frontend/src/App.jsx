@@ -95,11 +95,16 @@ const App = () => {
       {!user ? 
         <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
       : 
-        <Togglable buttonLabel='create new' logout={handleLogout} hide={hide} show={show} toggle={toggle}>
-          <PostingForm addBlog={refreshBlogs} toggle={toggle}/>
-        </Togglable>
+        <div>
+          <Button onClick={handleLogout} buttonLabel='logout'/>
+          <Togglable buttonLabel1='create new' buttonLabel2='cancel' logout={handleLogout} hide={hide} show={show} toggle={toggle}>
+            <PostingForm addBlog={refreshBlogs} toggle={toggle}/>
+          </Togglable>
+        </div>
       }
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+      {blogs.map(blog => 
+          <Blog key={blog.id} blog={blog} />
+      )}
     </div>
   )
 }
