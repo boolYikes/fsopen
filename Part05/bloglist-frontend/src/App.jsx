@@ -15,6 +15,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState([])
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -79,6 +80,13 @@ const App = () => {
       }, 3000)
     }
   }
+
+  const hide = { display: visible ? 'none' : '' }
+  const show = { display: visible ? '' : 'none' }
+
+  const toggle = () => {
+      setVisible(!visible)
+  }
   return (
     <div>
       <h1>The King of Brutalism</h1>
@@ -87,8 +95,8 @@ const App = () => {
       {!user ? 
         <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
       : 
-        <Togglable buttonLabel='create new' logout={handleLogout}>
-          <PostingForm addBlog={refreshBlogs}/>
+        <Togglable buttonLabel='create new' logout={handleLogout} hide={hide} show={show} toggle={toggle}>
+          <PostingForm addBlog={refreshBlogs} toggle={toggle}/>
         </Togglable>
       }
       {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}

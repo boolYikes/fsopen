@@ -1,7 +1,7 @@
 import blogsService from '../services/blogs'
 import { useState } from 'react'
 
-const PostingForm = ({ addBlog }) => { // is handling state here a good idea?
+const PostingForm = ({ addBlog, toggle }) => { // is handling state here a good idea?
     const [formData, setFormData] = useState({
         title: '',
         author: '',
@@ -41,7 +41,8 @@ const PostingForm = ({ addBlog }) => { // is handling state here a good idea?
                 <label>title:<input type="text" name="title" value={formData.title} onChange={handleChange}/></label><br/>
                 <label>author:<input type="text" name="author" value={formData.author} onChange={handleChange}/></label><br/>
                 <label>url:<input type="text" name="url" value={formData.url} onChange={handleChange}/></label><br/>
-                <button type="submit">create</button>
+                {/* onClick does not override the submit, so we can use two actions at once... is the hypothesis */}
+                <button onClick={toggle} type="submit">create</button>
             </form>
         </>
     )

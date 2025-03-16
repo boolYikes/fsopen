@@ -1,25 +1,20 @@
-import { useState } from 'react'
 import Button from './Button'
 
 const Togglable = (props) => {
-    const [visible, setVisible] = useState(false)
-
-    const hide = { display: visible ? 'none' : '' }
-    const show = { display: visible ? '' : 'none' }
-
-    const toggle = () => {
-        setVisible(!visible)
-    }
+    
     // pass the form and label
     return (
         <>
+            {/* Division of labor! This should not be here */}
             <Button onClick={props.logout} buttonLabel='logout'/>
-            <div style={hide}>
-                <Button onClick={toggle} buttonLabel={props.buttonLabel}/>
+
+            <div style={props.hide}>
+                <Button onClick={props.toggle} buttonLabel={props.buttonLabel}/>
             </div>
-            <div style={show}>
+
+            <div style={props.show}>
                 {props.children} 
-                <Button onClick={toggle} buttonLabel='cancel'/>
+                <Button onClick={props.toggle} buttonLabel='cancel'/>
                 {/* Hello, {props.username}! <button onClick={props.logout}>logout</button>
                 {props.username ? <PostingForm addBlog={props.addBlog}/> : <br/>} */}
             </div>
