@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import Content from './components/Content'
-import LoginForm from './components/Login'
+import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
+import PostingForm from './components/PostingForm'
+import Blog from './components/Blog'
 import Message from './components/Message'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import logoutService from './services/logout'
+import Button from './components/Button'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -80,32 +83,15 @@ const App = () => {
     <div>
       <h1>The King of Brutalism</h1>
       <Message message={message}/>
+      <h2>Blogs</h2>
       {!user ? 
-      <div>
-        <h2>You shall not pass!</h2>
-        <form onSubmit={handleLogin}>
-            <div>
-                username
-                <input
-                type='text'
-                value={username}
-                name='Username'
-                onChange={({ target }) => setUsername(target.value)}
-                />
-            </div>
-            <div>
-                password
-                <input
-                type='password'
-                value={password}
-                name='Password'
-                onChange={({ target }) => setPassword(target.value)}
-                />
-            </div>
-            <button type='submit'>login</button>
-        </form>
-      </div>
-      : <Content blogs={blogs} logout={handleLogout} username={user.username} addBlog={refreshBlogs}/>}
+        <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
+      : 
+        <Togglable buttonLabel='create new' logout={handleLogout}>
+          <PostingForm addBlog={refreshBlogs}/>
+        </Togglable>
+      }
+      {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
     </div>
   )
 }
