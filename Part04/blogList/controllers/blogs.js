@@ -49,14 +49,33 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
         res.status(401).json({ error: 'That\'s not your blog!' })
     }
 })
-blogsRouter.put('/:id', async (req, res, next) => {
-    const { title, author, likes, url } = req.body
-    const updatedBlog = await Blog.findByIdAndUpdate(
-        req.params.id,
-        { title, author, likes, url },
-        { new: true, runValidators: true, context: 'query'}
-    )
-    res.json(updatedBlog)
+blogsRouter.put('/:id', middleware.userExtractor, async (req, res, next) => {
+    const user = req.user
+    // const body = req.body
+    // const title = body.title
+    // const author = body.author
+    // const url = body.url
+    // const likes = body.likes
+    const target = await Blog.findById(req.params.id)
+    if (!target) {
+        return res.status(404).json({ message: 'Blog not found' })
+    }
+
+    if (target.liked_users.includes(user.id)) {
+        return res.status(400).json({ message: 'Can\'t submit duplicate likes!' })
+    }
+
+    target.liked_users.push(user.id)
+    target.likes = target.likes + 1 // should i measure the length of the liked_users? wouldn't it add time complexity?
+    await target.save()
+    res.status(200).json({ message: 'You have liked the blog post.' })
+
+    // const updatedBlog = await Blog.findByIdAndUpdate(
+    //     req.params.id,
+    //     { user, title, author, likes, url },
+    //     { new: true, runValidators: true, context: 'query'}
+    // )
+    res.json(target)
 })
 
 module.exports = blogsRouter

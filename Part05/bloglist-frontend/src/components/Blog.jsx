@@ -1,9 +1,12 @@
 import Button from "./Button"
+import blogsService from '../services/blogs'
 import { useState } from "react"
 
 const Blog = ({ blog }) => {
   // Must not share state with Togglable. Shoulda kept the states inside the Togglable?
   const [vis, setVis] = useState(false)
+  const [likes, setLikes] = useState(0)
+  const [liked, setLiked] = useState(false)
 
   const blogStyle = {
     paddingTop: 5,
@@ -13,8 +16,14 @@ const Blog = ({ blog }) => {
     marginBottom: 2
   }
 
-  const updateLike = () => {
+  const updateLike = async () => {
     // add update to services that routes to update like backend api
+    try {
+      blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
+      const res = await blogsService.like()
+    } catch (exception) {
+      console.error(exception)
+    }
     console.log("LIKE UPDATED")
   }
 
