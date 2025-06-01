@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
     )  
   }, [])
 
@@ -32,12 +32,20 @@ const App = () => {
     }
   }, [])
 
-  const refreshBlogs = (newBlog) => {
-    setBlogs([...blogs, newBlog])
+  const handleUpdate = (modified) => {
+    setBlogs(prev => prev
+      .map(b => b.id === modified.id ? modified : b)
+      .sort((a, b) => b.likes - a.likes)
+    )
+  }
+  
+  const addBlogs = (newBlog) => {
+    setBlogs([...blogs, newBlog].sort((a, b) => b.likes - a.likes))
     setMessage([`Created ${newBlog.title} by ${user.username}`, 'success'])
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setMessage([])
     }, 3000)
+    return () => clearTimeout(timer)
   } // for refreshing after creation
 
   const handleLogin = async (event) => {
@@ -98,12 +106,12 @@ const App = () => {
         <div>
           <Button onClick={handleLogout} buttonLabel='logout'/>
           <Togglable buttonLabel1='create new' buttonLabel2='cancel' logout={handleLogout} hide={hide} show={show} toggle={toggle}>
-            <PostingForm addBlog={refreshBlogs} toggle={toggle}/>
+            <PostingForm addBlog={addBlogs} toggle={toggle}/>
           </Togglable>
         </div>
       }
       {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} />
       )}
     </div>
   )
