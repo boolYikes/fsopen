@@ -31,9 +31,9 @@ const like = async blog => {
 
 const del = async blog => {
   const config = {
-    headers: { 
-      Authorization: token, 
-      "Content-Type": "application/json" 
+    headers: {
+      Authorization: token,
+      'Content-Type': 'application/json'
     },
   }
   try {

@@ -1,6 +1,7 @@
-import Button from "./Button"
+import Button from './Button'
 import blogsService from '../services/blogs'
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = (props) => {
   // Must not share state with Togglable. Shoulda kept the states inside the Togglable?
@@ -33,9 +34,9 @@ const Blog = (props) => {
     try{
       // const confirmed = window.confirm("Will you do me the honor of being my terminator?")
       // if (confirmed) {
-        blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
-        await blogsService.del(blogContent)
-        props.onDelete(blogContent)
+      blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
+      await blogsService.del(blogContent)
+      props.onDelete(blogContent)
       // }
     } catch (exception) {
       console.error(exception)
@@ -43,27 +44,34 @@ const Blog = (props) => {
   }
   return (
     <div>
-        {!vis?
-          <div style={blogStyle}>
-            {blogContent.title} by {blogContent.author} {' '}
-            <Button onClick={() => setVis(!vis)} buttonLabel='show all'/>
-          </div>
-          :
-          <div style={blogStyle}>
+      {!vis?
+        <div style={blogStyle}>
+          {blogContent.title} by {blogContent.author} {' '}
+          <Button onClick={() => setVis(!vis)} buttonLabel='show all'/>
+        </div>
+        :
+        <div style={blogStyle}>
             Title: {blogContent.title} {' '}
-            <Button onClick={() => setVis(!vis)} buttonLabel='summary'/><br/>
-            Author: {blogContent.author} <br/> 
-            URL: {blogContent.url} <br/> 
+          <Button onClick={() => setVis(!vis)} buttonLabel='summary'/><br/>
+            Author: {blogContent.author} <br/>
+            URL: {blogContent.url} <br/>
             Likes: {blogContent.likes} {' '}
-            <Button onClick={updateLike} buttonLabel='like'/><br/>
-            {props.sessionInfo && blogContent.user && props.sessionInfo.username === blogContent.author
+          <Button onClick={updateLike} buttonLabel='like'/><br/>
+          {props.sessionInfo && blogContent.user && props.sessionInfo.username === blogContent.author
             ? <Button disabled={false} onClick={deleteBlog} buttonLabel='delete'/>
             // ? console.log(blogContent.author)
             : <Button disabled={true} buttonLabel='delete'/>
-            }
-          </div>
-        }
-    </div>  
-)}
+          }
+        </div>
+      }
+    </div>
+  )}
+
+Blog.propTypes = {
+  sessionInfo: PropTypes.object,
+  blog: PropTypes.object.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
+}
 
 export default Blog

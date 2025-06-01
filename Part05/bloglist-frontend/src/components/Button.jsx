@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const styles = {
   overlay: {
@@ -18,48 +19,54 @@ const styles = {
 
 const Button = ({ onClick, buttonLabel, disabled }) => {
 
-    const [confirming, setConfirming] = useState(false);
+  const [confirming, setConfirming] = useState(false)
 
-    const handleClick = () => {
-        if (buttonLabel === 'delete') {
-            setConfirming(true)
-        } else {
-            onClick()
-        }
+  const handleClick = () => {
+    if (buttonLabel === 'delete') {
+      setConfirming(true)
+    } else {
+      onClick()
     }
+  }
 
-    const handleConfirm = () => {
-        setConfirming(false)
-        if (buttonLabel === 'delete') {
-            onClick()
-        }
-        return true
+  const handleConfirm = () => {
+    setConfirming(false)
+    if (buttonLabel === 'delete') {
+      onClick()
     }
+    return true
+  }
 
-    const handleCancel = () => {
-        setConfirming(false)
-        return false
-    }
+  const handleCancel = () => {
+    setConfirming(false)
+    return false
+  }
 
-    return (
-        <>
-            {disabled 
-            ? <button disabled>{buttonLabel}</button>
-            : <button onClick={handleClick}>{buttonLabel}</button>
-            }
+  return (
+    <>
+      {disabled
+        ? <button disabled>{buttonLabel}</button>
+        : <button onClick={handleClick}>{buttonLabel}</button>
+      }
 
-            {confirming ? (
-                <div style={styles.overlay}>
-                    <div style={styles.modal}>
-                        <p>Do me the honor of being my terminator?</p>
-                            <button onClick={handleConfirm}>Yesss 🙆‍♂️</button>
-                            <button onClick={handleCancel}>Nope 🐾</button>
-                    </div>
-                </div>
-            ):<></>}
-            
-        </>
-    )
+      {confirming ? (
+        <div style={styles.overlay}>
+          <div style={styles.modal}>
+            <p>Do me the honor of being my terminator?</p>
+            <button onClick={handleConfirm}>Yesss 🙆‍♂️</button>
+            <button onClick={handleCancel}>Nope 🐾</button>
+          </div>
+        </div>
+      ):<></>}
+
+    </>
+  )
+}
+
+Button.propTypes = {
+  onClick: PropTypes.func,
+  buttonLabel: PropTypes.string.isRequired,
+  disabled: PropTypes.bool
 }
 
 export default Button

@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -36,25 +36,25 @@ const App = () => {
     if (loggedUserJSON) { // if the credential exists
       const user = JSON.parse(loggedUserJSON)
       const decoded = expTime(user.token)
-        if (decoded.exp) {
-          const expiresAt = decoded.exp * 1000;
-          const now = Date.now()
-          const timeout = expiresAt - now;
-          console.log(`timeout is ${timeout}`)
-          if (timeout > 0) {
-            setUser(user)
-            blogService.setToken(user.token)
-            setTimeout(() => {
-              window.localStorage.removeItem('loggedBlogAppUser')
-              setUser(null)
-              blogService.setToken(null)
-            }, timeout)
-          } else {
+      if (decoded.exp) {
+        const expiresAt = decoded.exp * 1000
+        const now = Date.now()
+        const timeout = expiresAt - now
+        console.log(`timeout is ${timeout}`)
+        if (timeout > 0) {
+          setUser(user)
+          blogService.setToken(user.token)
+          setTimeout(() => {
             window.localStorage.removeItem('loggedBlogAppUser')
             setUser(null)
             blogService.setToken(null)
-          }
+          }, timeout)
+        } else {
+          window.localStorage.removeItem('loggedBlogAppUser')
+          setUser(null)
+          blogService.setToken(null)
         }
+      }
     }
   }, [])
 
@@ -72,7 +72,7 @@ const App = () => {
       .sort((a, b) => b.likes - a.likes)
     setBlogs(newBlogs)
   }
-  
+
   const addBlogs = (newBlog) => {
     setBlogs([...blogs, newBlog].sort((a, b) => b.likes - a.likes))
     setMessage([`Created ${newBlog.title} by ${user.username}`, 'success'])
@@ -84,7 +84,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -129,26 +129,26 @@ const App = () => {
   const show = { display: visible ? '' : 'none' }
 
   const toggle = () => {
-      setVisible(!visible)
+    setVisible(!visible)
   }
   return (
     <div>
       <h1>The King of Brutalism</h1>
       <Message message={message}/>
       <h2>Blogs</h2>
-      {!user ? 
+      {!user ?
         <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
-      : 
+        :
         <div>
           <SessionTimer token={JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token} />
           <Button onClick={handleLogout} buttonLabel='logout'/>
-          <Togglable buttonLabel1='create new' buttonLabel2='cancel' logout={handleLogout} hide={hide} show={show} toggle={toggle}>
+          <Togglable buttonLabel1='create new' buttonLabel2='cancel' hide={hide} show={show} toggle={toggle}>
             <PostingForm addBlog={addBlogs} toggle={toggle}/>
           </Togglable>
         </div>
       }
-      {blogs.map(blog => 
-          <Blog key={blog.id} sessionInfo={user} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
+      {blogs.map(blog =>
+        <Blog key={blog.id} sessionInfo={user} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
       )}
     </div>
   )
