@@ -8,6 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import logoutService from './services/logout'
 import Button from './components/Button'
+import SessionTimer from './components/SessionTimer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -24,11 +25,36 @@ const App = () => {
   }, [])
 
   useEffect(() => {
+    const expTime = (token) => {
+      try {
+        return JSON.parse(atob(token.split('.')[1]))
+      } catch (exception) {
+        return null
+      }
+    }
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) { // if the credential exists
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+      const decoded = expTime(user.token)
+        if (decoded.exp) {
+          const expiresAt = decoded.exp * 1000;
+          const now = Date.now()
+          const timeout = expiresAt - now;
+          console.log(`timeout is ${timeout}`)
+          if (timeout > 0) {
+            setUser(user)
+            blogService.setToken(user.token)
+            setTimeout(() => {
+              window.localStorage.removeItem('loggedBlogAppUser')
+              setUser(null)
+              blogService.setToken(null)
+            }, timeout)
+          } else {
+            window.localStorage.removeItem('loggedBlogAppUser')
+            setUser(null)
+            blogService.setToken(null)
+          }
+        }
     }
   }, [])
 
@@ -37,6 +63,14 @@ const App = () => {
       .map(b => b.id === modified.id ? modified : b)
       .sort((a, b) => b.likes - a.likes)
     )
+  }
+
+  const handleDelete = (deleted) => {
+    // pop the blog
+    const newBlogs = blogs
+      .filter(blog => blog.id !== deleted.id)
+      .sort((a, b) => b.likes - a.likes)
+    setBlogs(newBlogs)
   }
   
   const addBlogs = (newBlog) => {
@@ -50,6 +84,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    
     try {
       const user = await loginService.login({
         username, password,
@@ -57,6 +92,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
       )
+
       blogService.setToken(user.token)
       setUser(user)
       setMessage([`Welcome ${username}!!`, 'success'])
@@ -104,6 +140,7 @@ const App = () => {
         <LoginForm handleLogin={handleLogin} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
       : 
         <div>
+          <SessionTimer token={JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token} />
           <Button onClick={handleLogout} buttonLabel='logout'/>
           <Togglable buttonLabel1='create new' buttonLabel2='cancel' logout={handleLogout} hide={hide} show={show} toggle={toggle}>
             <PostingForm addBlog={addBlogs} toggle={toggle}/>
@@ -111,7 +148,7 @@ const App = () => {
         </div>
       }
       {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} />
+          <Blog key={blog.id} sessionInfo={user} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
       )}
     </div>
   )

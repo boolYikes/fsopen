@@ -21,7 +21,7 @@ const Blog = (props) => {
     try {
       blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
       const res = await blogsService.like(blogContent)
-      console.log(`LIKE UPDATED, RESPONSE: ${res}`)
+      // console.log(`LIKE UPDATED, RESPONSE: ${res}`)
       setBlogContent(res)
       props.onUpdate(res)
     } catch (exception) {
@@ -29,6 +29,18 @@ const Blog = (props) => {
     }
   }
 
+  const deleteBlog = async (event) => {
+    try{
+      // const confirmed = window.confirm("Will you do me the honor of being my terminator?")
+      // if (confirmed) {
+        blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
+        await blogsService.del(blogContent)
+        props.onDelete(blogContent)
+      // }
+    } catch (exception) {
+      console.error(exception)
+    }
+  }
   return (
     <div>
         {!vis?
@@ -43,7 +55,12 @@ const Blog = (props) => {
             Author: {blogContent.author} <br/> 
             URL: {blogContent.url} <br/> 
             Likes: {blogContent.likes} {' '}
-            <Button onClick={updateLike} buttonLabel='like'/>
+            <Button onClick={updateLike} buttonLabel='like'/><br/>
+            {props.sessionInfo && blogContent.user && props.sessionInfo.username === blogContent.author
+            ? <Button disabled={false} onClick={deleteBlog} buttonLabel='delete'/>
+            // ? console.log(blogContent.author)
+            : <Button disabled={true} buttonLabel='delete'/>
+            }
           </div>
         }
     </div>  

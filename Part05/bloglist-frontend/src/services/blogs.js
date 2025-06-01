@@ -29,4 +29,19 @@ const like = async blog => {
   return response.data
 }
 
-export default { getAll, create, setToken, like }
+const del = async blog => {
+  const config = {
+    headers: { 
+      Authorization: token, 
+      "Content-Type": "application/json" 
+    },
+  }
+  try {
+    await axios.delete(`${baseUrl}/${blog.id}`, config)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export default { getAll, create, setToken, like, del }
