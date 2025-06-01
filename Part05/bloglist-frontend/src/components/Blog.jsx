@@ -1,12 +1,13 @@
 import Button from "./Button"
 import blogsService from '../services/blogs'
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 const Blog = ({ blog }) => {
   // Must not share state with Togglable. Shoulda kept the states inside the Togglable?
   const [vis, setVis] = useState(false)
-  const [likes, setLikes] = useState(0)
-  const [liked, setLiked] = useState(false)
+  const [blogContent, setBlogContent] = useState(blog)
+  // const [likes, setLikes] = useState(0)
+  // const [liked, setLiked] = useState(false)
 
   const blogStyle = {
     paddingTop: 5,
@@ -16,31 +17,32 @@ const Blog = ({ blog }) => {
     marginBottom: 2
   }
 
-  const updateLike = async () => {
-    // add update to services that routes to update like backend api
+  const updateLike = async (blog) => {
     try {
       blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
-      const res = await blogsService.like()
+      const res = await blogsService.like(blog)
+      console.log(`LIKE UPDATED, RESPONSE: ${res}`)
+      setBlogContent(res)
     } catch (exception) {
       console.error(exception)
     }
-    console.log("LIKE UPDATED")
   }
 
   return (
     <div>
         {!vis?
           <div style={blogStyle}>
-            {blog.title} by {blog.author}
+            {blogContent.title} by {blogContent.author} {' '}
             <Button onClick={() => setVis(!vis)} buttonLabel='show all'/>
           </div>
           :
           <div style={blogStyle}>
-            Title: {blog.title} <br/> 
-            Author: {blog.author} <br/> 
-            URL: {blog.url} <br/> 
-            Likes: {blog.likes} <Button onClick={() => updateLike()} buttonLabel='like'/> <br/>
-            <Button onClick={() => setVis(!vis)} buttonLabel='summary'/>
+            Title: {blogContent.title} {' '}
+            <Button onClick={() => setVis(!vis)} buttonLabel='summary'/><br/>
+            Author: {blogContent.author} <br/> 
+            URL: {blogContent.url} <br/> 
+            Likes: {blogContent.likes} {' '}
+            <Button onClick={() => updateLike(blogContent)} buttonLabel='like'/>
           </div>
         }
     </div>  

@@ -49,6 +49,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
         res.status(401).json({ error: 'That\'s not your blog!' })
     }
 })
+// Not general-purpose. More like a like-handler. Is this a good practice?
 blogsRouter.put('/:id', middleware.userExtractor, async (req, res, next) => {
     const user = req.user
     // const body = req.body
@@ -68,14 +69,13 @@ blogsRouter.put('/:id', middleware.userExtractor, async (req, res, next) => {
     target.liked_users.push(user.id)
     target.likes = target.likes + 1 // should i measure the length of the liked_users? wouldn't it add time complexity?
     await target.save()
-    res.status(200).json({ message: 'You have liked the blog post.' })
+    res.status(200).json(target)
 
     // const updatedBlog = await Blog.findByIdAndUpdate(
     //     req.params.id,
     //     { user, title, author, likes, url },
     //     { new: true, runValidators: true, context: 'query'}
     // )
-    res.json(target)
 })
 
 module.exports = blogsRouter
