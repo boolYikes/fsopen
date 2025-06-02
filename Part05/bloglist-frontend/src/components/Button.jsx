@@ -45,8 +45,8 @@ const Button = ({ onClick, buttonLabel, disabled }) => {
   return (
     <>
       {disabled
-        ? <button disabled>{buttonLabel}</button>
-        : <button onClick={handleClick}>{buttonLabel}</button>
+        ? <button disabled data-testid='disabledButton'>{buttonLabel}</button>
+        : <button onClick={handleClick} data-testid='normalButton'>{buttonLabel}</button>
       }
 
       {confirming ? (

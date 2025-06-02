@@ -30,20 +30,20 @@ const Blog = (props) => {
     }
   }
 
-  const deleteBlog = async (event) => {
+  const deleteBlog = async () => {
     try{
       // const confirmed = window.confirm("Will you do me the honor of being my terminator?")
       // if (confirmed) {
       blogsService.setToken(JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token)
       await blogsService.del(blogContent)
-      props.onDelete(blogContent)
+      props.onDelete(blogContent) // this prolly should not be -> must validate
       // }
     } catch (exception) {
       console.error(exception)
     }
   }
   return (
-    <div>
+    <div className='blog'>
       {!vis?
         <div style={blogStyle}>
           {blogContent.title} by {blogContent.author} {' '}
@@ -57,7 +57,7 @@ const Blog = (props) => {
             URL: {blogContent.url} <br/>
             Likes: {blogContent.likes} {' '}
           <Button onClick={updateLike} buttonLabel='like'/><br/>
-          {props.sessionInfo && blogContent.user && props.sessionInfo.username === blogContent.author
+          {props.sessionInfo && blogContent.author && props.sessionInfo.username === blogContent.author
             ? <Button disabled={false} onClick={deleteBlog} buttonLabel='delete'/>
             // ? console.log(blogContent.author)
             : <Button disabled={true} buttonLabel='delete'/>
