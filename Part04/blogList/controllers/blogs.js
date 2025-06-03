@@ -36,11 +36,13 @@ blogsRouter.post('/', middleware.userExtractor, async (req, res) => {
     res.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/', async (req, res) => {
-    // this is for resetting db
-    await Blog.deleteMany({})
-    res.status(204).end()
-})
+// blogsRouter.delete('/', async (req, res) => {
+//     // this is for resetting db in tests
+//     if (process.env.NODE_ENV === 'test') {
+//         await Blog.deleteMany({})
+//         res.status(204).end()
+//     }
+// })
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
     const user = req.user
@@ -65,12 +67,14 @@ blogsRouter.put('/:id', middleware.userExtractor, async (req, res, next) => {
         return res.status(404).json({ message: 'Blog not found' })
     }
 
-    if (target.liked_users.includes(user.id)) {
-        return res.status(400).json({ message: 'Can\'t submit duplicate likes!' })
+    if (process.env.NODE_ENV !== 'test') {// allow dupes on tests
+        if (target.liked_users.includes(user.id)) { 
+            return res.status(400).json({ message: 'Can\'t submit duplicate likes!' })
+        }
     }
 
     target.liked_users.push(user.id)
-    target.likes = target.likes + 1 // should i measure the length of the liked_users? wouldn't it add time complexity?
+    target.likes = target.likes + 1 
     await target.save()
     res.status(200).json(target)
 

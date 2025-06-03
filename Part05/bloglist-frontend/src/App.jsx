@@ -32,27 +32,28 @@ const App = () => {
         return null
       }
     }
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) { // if the credential exists
-      const user = JSON.parse(loggedUserJSON)
-      const decoded = expTime(user.token)
-      if (decoded.exp) {
-        const expiresAt = decoded.exp * 1000
-        const now = Date.now()
-        const timeout = expiresAt - now
-        console.log(`timeout is ${timeout}`)
-        if (timeout > 0) {
-          setUser(user)
-          blogService.setToken(user.token)
-          setTimeout(() => {
+    if (user) {
+      const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
+      if (loggedUserJSON) { // if the credential exists
+        const user = JSON.parse(loggedUserJSON)
+        const decoded = expTime(user.token)
+        if (decoded.exp) {
+          const expiresAt = decoded.exp * 1000
+          const now = Date.now()
+          const timeout = expiresAt - now
+          if (timeout > 0) {
+            setUser(user)
+            blogService.setToken(user.token)
+            setTimeout(() => {
+              window.localStorage.removeItem('loggedBlogAppUser')
+              setUser(null)
+              blogService.setToken(null)
+            }, timeout)
+          } else {
             window.localStorage.removeItem('loggedBlogAppUser')
             setUser(null)
             blogService.setToken(null)
-          }, timeout)
-        } else {
-          window.localStorage.removeItem('loggedBlogAppUser')
-          setUser(null)
-          blogService.setToken(null)
+          }
         }
       }
     }
@@ -83,40 +84,43 @@ const App = () => {
   } // for refreshing after creation
 
   const handleLogin = async (event) => {
-    event.preventDefault()
-
+    event.preventDefault() // VERY IMPORTANT
+    console.log('loging clicked')
     try {
-      const user = await loginService.login({
-        username, password,
-      })
-      window.localStorage.setItem(
-        'loggedBlogAppUser', JSON.stringify(user)
-      )
-
-      blogService.setToken(user.token)
-      setUser(user)
-      setMessage([`Welcome ${username}!!`, 'success'])
-      setUsername('')
-      setPassword('')
-      setTimeout(() => {
-        setMessage([])
-      }, 3000)
+      const newuser = await loginService.login({ username, password })
+      if (newuser) {
+        window.localStorage.setItem(
+          'loggedBlogAppUser', JSON.stringify(newuser)
+        )
+        
+        blogService.setToken(newuser.token)
+        setUser(newuser)
+        setMessage([`Welcome ${username}!!`, 'success'])
+        setTimeout(() => {
+          setMessage([])
+        }, 3000)
+      }
     } catch (exception) {
       setMessage(['Invalid credential given.', 'error'])
+      setUsername('')
+      setPassword('')
       setTimeout(() => {
         setMessage([])
       }, 3000)
     }
   }
 
-  const handleLogout = async (event) => {
-    event.preventDefault()
+  const handleLogout = async () => {
     try {
-      const user = await logoutService.logout()
+      await logoutService.logout()
       window.localStorage.removeItem('loggedBlogAppUser')
-      blogService.setToken(user.token)
-      setUser(user)
+      blogService.setToken('')
+      setUser(null)
       // window.localStorage.clear()
+      setMessage(['You have logged out.', 'info'])
+      setTimeout(() => {
+        setMessage([])
+      }, 3000)
     } catch (exception) { // is this necessary?
       setMessage(['Something went wrong during logout.', 'error'])
       setTimeout(() => {
@@ -132,7 +136,7 @@ const App = () => {
     setVisible(!visible)
   }
   return (
-    <div>
+    <div data-testid='whole'>
       <h1>The King of Brutalism</h1>
       <Message message={message}/>
       <h2>Blogs</h2>

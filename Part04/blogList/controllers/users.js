@@ -19,10 +19,12 @@ usersRouter.post('/', async (req, res, next) => {
         const savedUser = await user.save()
         res.status(201).json(savedUser)
 })
-usersRouter.delete('/', async (req, res) => {
-    await User.deleteMany({})
-    res.status(204).end()
-})
+// usersRouter.delete('/', async (req, res) => {
+//     if (process.env.NODE_ENV === 'test') {
+//         await User.deleteMany({})
+//         res.status(204).end()
+//     }
+// })
 usersRouter.get('/', async (req, res, next) => {
     const allUsers = await User.find({}).populate('blogs', { title: 1, author: 1, url: 1, likes: 1 })
     res.json(allUsers)

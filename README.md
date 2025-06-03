@@ -1,4 +1,4 @@
-<p><strong>Will try to branch out from Part06 :P</strong></p>
+<p><strong>Monorepo is messy...</strong></p>
 <h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part00">Part 0</a></h2>
 <details>
     <summary><span style="color:salmon">Expand to see</span></summary>
@@ -50,6 +50,7 @@
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part05/bloglist-frontend">Ex5.1-5.12 frontend</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex5.1-5.12 backend</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part04/blogList">Ex5.1-5.16 backend</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/playwright">Ex5.17-5.23 end-to-end test with Playwright</a></li>
     </ul>
 </details>

@@ -43,7 +43,7 @@ const PostingForm = ({ addBlog, toggle }) => { // is handling state here a good 
         <label>author:<input type="text" name="author" value={formData.author} placeholder='author' onChange={handleChange}/></label><br/>
         <label>url:<input type="text" name="url" value={formData.url} placeholder='url' onChange={handleChange}/></label><br/>
         {/* onClick does not override the submit, so we can use two actions at once... is the hypothesis */}
-        <button onClick={toggle} type="submit">create</button>
+        <button onClick={toggle} type="submit" data-testid="postbutton">create</button>
       </form>
     </>
   )

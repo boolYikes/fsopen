@@ -175,26 +175,27 @@ test('Get one id', async () => {
         .expect('Content-Type', /application\/json/)
     assert.deepStrictEqual(result.body, target)
 })
-test('Update test', async () => {
-    const initBlogs = await helper.getAllBlogs()
-    const target = initBlogs[0]
-    const tempBlog = new Blog({
-        title: "Update test",
-        author: "Update test",
-        url: "https://test.update",
-        likes: 567
-    })
-    const putResult = await api
-        .put(`/api/blogs/${target.id}`)
-        .send(tempBlog)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-    const getResult = await api
-        .get(`/api/blogs/${target.id}`)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-    assert.deepStrictEqual(getResult.body, putResult.body)
-})
+// Put is for likes 
+// test('Update test', async () => {
+//     const initBlogs = await helper.getAllBlogs()
+//     const target = initBlogs[0]
+//     const tempBlog = new Blog({
+//         title: "Update test",
+//         author: "Update test",
+//         url: "https://test.update",
+//         likes: 567
+//     })
+//     const putResult = await api
+//         .put(`/api/blogs/${target.id}`)
+//         .send(tempBlog)
+//         .expect(200)
+//         .expect('Content-Type', /application\/json/)
+//     const getResult = await api
+//         .get(`/api/blogs/${target.id}`)
+//         .expect(200)
+//         .expect('Content-Type', /application\/json/)
+//     assert.deepStrictEqual(getResult.body, putResult.body)
+// })
 describe('User related tests', () => {
     test('Short password POST test', async () => {
         const invalid = {
