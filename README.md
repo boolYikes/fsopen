@@ -54,3 +54,11 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/playwright">Ex5.17-5.23 end-to-end test with Playwright</a></li>
     </ul>
 </details>
+<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part06">Part 6</a></h2>
+<details>
+    <summary><span style="color:salmon">Expand to see</span></summary>
+    <ul>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/unicafe-redux">Ex6.1-6.2 unicafe revisited</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/redux-anecdotes">Ex6.3-6.8 anecdote revisited</a></li>
+    </ul>
+</details>
