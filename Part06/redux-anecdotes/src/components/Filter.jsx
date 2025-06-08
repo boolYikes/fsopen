@@ -14,7 +14,8 @@ const Filter = () => {
     return (
         <div style={style}>
             filter {' '}
-            <input 
+            <input
+                name="filter"
                 onChange={handleChange} 
                 onFocus={() => {console.log('focused')}}
                 onBlur={() => {console.log('blurred')}}

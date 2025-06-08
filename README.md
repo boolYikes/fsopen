@@ -59,6 +59,6 @@
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/unicafe-redux">Ex6.1-6.2 unicafe revisited</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/redux-anecdotes">Ex6.3-6.8 anecdote revisited</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/redux-anecdotes">Ex6.3-6.13 anecdote revisited</a></li>
     </ul>
 </details>

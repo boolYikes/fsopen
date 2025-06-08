@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { vote } from "../reducers/anecdoteReducer"
+import { notify, remove } from "../reducers/notificationReducer"
 import { useMemo } from "react"
 
 const Anecdote = ({ anecdote, handleClick }) => {
@@ -22,19 +23,25 @@ const AnecdoteList = () => {
     const filter = useSelector(state => state.filter)
 
     // memoize -> no rerendering -> happy browser
+    // plus, it doesn't touch the immutable
     const filteredAnecdotes = useMemo(() => {
-        return (anecdotes.filter(anecdote => 
-            anecdote.content.includes(filter)
-        ))
+        return (anecdotes
+            .filter(anecdote => anecdote.content.includes(filter))
+            .sort((a, b) => b.votes - a.votes)
+        )
     }, [anecdotes, filter])
 
     return (
-        <ul>
+        <ul style={{ listStyle: 'circle' }}>
             {filteredAnecdotes.map(anecdote =>
                 <Anecdote 
                     key={anecdote.id}
                     anecdote={anecdote}
-                    handleClick={() => dispatch(vote(anecdote.id))}
+                    handleClick={() => {
+                        dispatch(vote(anecdote.id))
+                        dispatch(notify(`Voted for ${anecdote.id}`))
+                        setTimeout(() => dispatch(remove()), 5000)
+                    }}
                 />
             )}
         </ul>

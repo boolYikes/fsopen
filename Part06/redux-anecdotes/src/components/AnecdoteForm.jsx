@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { add } from "../reducers/anecdoteReducer"
+import { notify, remove } from "../reducers/notificationReducer"
 
 const AnecdoteForm = () => {
 
@@ -14,6 +15,8 @@ const AnecdoteForm = () => {
         if (trimmedText) {
             setTextContent('')
             dispatch(add(trimmedText))
+            dispatch(notify('Anecdote added!!'))
+            setTimeout(() => dispatch(remove()), 5000)
         }
     }
 
