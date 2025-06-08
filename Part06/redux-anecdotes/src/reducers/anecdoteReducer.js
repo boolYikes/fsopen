@@ -1,5 +1,3 @@
-import { createStore } from "redux"
-
 // init
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -17,7 +15,7 @@ const asObject = (anecdote) => {
     votes: 0
   }
 }
-const initialState = { items: anecdotesAtStart.map(asObject) }
+const initialState = anecdotesAtStart.map(asObject)
 
 // Action types
 const VOTE = 'VOTE'
@@ -41,24 +39,18 @@ export const add = (content) => ({
 const voteReducer = (state = initialState, action) => {
   switch (action.type) {
     case VOTE:
-      return {
-        ...state,
-        items: state.items.map(item =>
-          item.id === action.payload
-          ? { ...item, votes: item.votes + 1 }
-          : item
+      return ( 
+        state.map(anecdote =>
+          anecdote.id === action.payload
+          ? { ...anecdote, votes: anecdote.votes + 1 }
+          : anecdote
         )
-      }
+      )
     case ADD_ANECDOTE:
-      return {
-        ...state,
-        items: [...state.items, action.payload]
-      }
+      return [...state, action.payload]
     default:
       return state 
   }
 }
 
-const store = createStore(voteReducer)
-
-export default store
+export default voteReducer
