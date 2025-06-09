@@ -1,22 +1,22 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { add } from "../reducers/anecdoteReducer"
-import { notify, remove } from "../reducers/notificationReducer"
+import { addAnecdote } from "../reducers/anecdoteReducer"
+import { notifyCreateAction } from "../reducers/notificationReducer"
 
 const AnecdoteForm = () => {
 
     const [textContent, setTextContent] = useState('')
     const dispatch = useDispatch()
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
 
         const trimmedText = textContent.trim()
         if (trimmedText) {
+            dispatch(addAnecdote(trimmedText))
+            dispatch(notifyCreateAction('Anecdote added!!', 5000))
+            event.target.entry.value = ''
             setTextContent('')
-            dispatch(add(trimmedText))
-            dispatch(notify('Anecdote added!!'))
-            setTimeout(() => dispatch(remove()), 5000)
         }
     }
 
