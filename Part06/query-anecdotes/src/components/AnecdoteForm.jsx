@@ -1,14 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { addAnecdote } from "../requests"
+import { useNotiDispatch } from "../NotiContext"
 
 const AnecdoteForm = () => {
   
+  const notiDispatcher = useNotiDispatch()
+
   const queryClient = useQueryClient()
   const newAnecdoteMutation = useMutation({ 
     mutationFn: addAnecdote,
-    onSuccess: (newOne) => { // newOne is returned by addAnecdote
-      const anecdotes = queryClient.invalidateQueries({ queryKey: ['anecdotes'] }) // refreshes fronted
+    onSuccess: async (newOne) => { // newOne is returned by addAnecdote
+      const anecdotes = queryClient.getQueryData(['anecdotes']) // refreshes fronted
       queryClient.setQueryData(['anecdotes'], anecdotes.concat(newOne)) // cache update, manually
+      
+      // toast
+      notiDispatcher({ type: 'add' })
+      setTimeout(() => notiDispatcher({ type: 'remove' }), 5000)
     },
   })
 
@@ -16,12 +23,20 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({ 
-      content,
-      id: Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0'),
-      votes: 0
-    })
-  
+    newAnecdoteMutation.mutate(
+      { 
+        content,
+        id: Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0'),
+        votes: 0
+      },
+      {
+        onError: (error) => {
+          // error toast
+          notiDispatcher({ type: "error", payload: `error: ${error.message}` })
+          setTimeout(() => notiDispatcher({ type: 'remove' }), 5000)
+        }
+      }
+    )
 }
 
   return (

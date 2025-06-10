@@ -60,5 +60,6 @@
     <ul>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/unicafe-redux">Ex6.1-6.2 unicafe revisited</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/redux-anecdotes">Ex6.3-6.19 anecdote revisited</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/query-anecdotes">Ex6.20-6.24 anecdote with react query and useReduce</a></li>
     </ul>
 </details>

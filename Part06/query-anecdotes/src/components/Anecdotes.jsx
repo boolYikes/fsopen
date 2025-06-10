@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getAnecdotes, vote, errorPageTest } from '../requests'
+import { useNotiDispatch } from '../NotiContext'
 
 const Anecdote = ({ target }) => {
 
+    const notiDispatcher = useNotiDispatch()
     const queryClient = useQueryClient()
     const voteMutation = useMutation({
         mutationFn: vote,
@@ -21,6 +23,8 @@ const Anecdote = ({ target }) => {
 
     const handleVote = (anecdote) => {
         voteMutation.mutate({...anecdote, votes: anecdote.votes + 1 })
+        notiDispatcher({ type: 'vote' })
+        setTimeout(() => notiDispatcher({ type: 'remove' }), 5000)
     }
 
     return (
