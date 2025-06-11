@@ -63,3 +63,10 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part06/query-anecdotes">Ex6.20-6.24 anecdote with react query and useReduce</a></li>
     </ul>
 </details>
+<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part07">Part 7</a></h2>
+<details>
+    <summary><span style="color:salmon">Expand to see</span></summary>
+    <ul>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part07/routed-anecdotes">Ex7.1-7.3 Routed anecdotes</a></li>
+    </ul>
+</details>
