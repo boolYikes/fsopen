@@ -5,7 +5,7 @@ const Footer = () => {
     marginTop: '2rem'
   }
   return (
-    <div style={style}>
+    <div style={style} className="container">
         Footer that smells like foot
     </div>
   )

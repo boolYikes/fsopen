@@ -8,23 +8,11 @@ import Anecdote from './components/Anecdote'
 import AnecdoteList from './components/AnecdoteList'
 import About from './components/About'
 import Menu from './components/Menu'
+import Notification from './components/Notification'
 
-const initState = [
-  {
-    content: 'If it hurts, do it more often',
-    author: 'Jez Humble',
-    info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
-    votes: 0,
-    id: 1
-  },
-  {
-    content: 'Premature optimization is the root of all evil',
-    author: 'Donald Knuth',
-    info: 'http://wiki.c2.com/?PrematureOptimization',
-    votes: 0,
-    id: 2
-  }
-]
+import { initState } from './assets/data'
+
+import './App.css'
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState(initState)
@@ -57,10 +45,10 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1 style={{ borderBottom: '1px solid black' }}>Software anecdotes</h1>
+    <div className='wrapper'>
+      <h1 className='container' style={{ borderBottom: '1px solid black' }}>Software anecdotes</h1>
       <Menu />
-      <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem'}}>{notification}</div>
+      <Notification text={notification} />
       <Routes>
         <Route path="/noti" element={<Navigate replace to="/"/>}   />
         <Route path="/:id" element={<Anecdote anecdote={anecdoteToShow} vote={vote}/>} />

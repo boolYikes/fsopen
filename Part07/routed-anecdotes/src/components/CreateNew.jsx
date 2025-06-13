@@ -1,6 +1,8 @@
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useField } from "../hooks"
+
+import { Form, Button } from "react-bootstrap"
+import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 const CreateNew = (props) => {
   const contentInput = useField('text', 'content')
@@ -27,24 +29,29 @@ const CreateNew = (props) => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit} onReset={handleReset}>
-        <div>
-          content {' '}
-          <input {...contentInput} />
+      <Form onSubmit={handleSubmit} onReset={handleReset}>
+        <Form.Group>
+          <FloatingLabel label="content">
+            <Form.Control {...contentInput} />
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group>
+          <FloatingLabel label="author">
+            <Form.Control {...authorInput} />
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group>
+          <FloatingLabel label="url">
+            <Form.Control {...urlInput} />
+          </FloatingLabel>
+        </Form.Group>
+        <div className="form-button-group">
+          <Button type="submit" variant="success">create</Button> {' '}
+          <Button type="reset" variant="dark">reset</Button>
         </div>
-        <div>
-          author {' '}
-          <input {...authorInput} />
-        </div>
-        <div>
-          url {' '}
-          <input {...urlInput} />
-        </div>
-        <button type="submit">create</button> {' '}
-        <button type="reset">reset</button>
-      </form>
+      </Form>
     </div>
   )
 

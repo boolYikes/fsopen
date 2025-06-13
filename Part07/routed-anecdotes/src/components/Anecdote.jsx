@@ -6,7 +6,7 @@ const Anecdote = ({ anecdote, vote }) => {
     fontWeight: 'bold'
   }
   return (
-    <div style={style}>
+    <div style={style} className="container">
       content: <span style={textStyle}>{anecdote.content}</span><br/>
       author: <span style={textStyle}>{anecdote.author}</span><br/>
       url: <span style={textStyle}>{anecdote.info}</span><br/>

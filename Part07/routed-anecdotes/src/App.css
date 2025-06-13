@@ -1,0 +1,25 @@
+* {
+    font-family: 'ubuntu', sans-serif;
+}
+
+.wrapper {
+    padding-top: 1rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+}
+
+a {
+    text-decoration: none;
+    color: salmon;
+}
+
+.left {
+    text-align: left;
+}
+.right {
+    text-align: left;
+}
+
+.form-button-group {
+    margin-top: 1rem;
+}
