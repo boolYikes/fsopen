@@ -69,5 +69,6 @@
     <ul>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part07/routed-anecdotes">Ex7.1-7.6 Routed anecdotes & custom hooks</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part07/country-hook">Ex7.7-7.8 Countries with custom hooks</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part07/blogList-revisited">Ex7.9-7.21 Bloglist revisited</a></li>
     </ul>
 </details>
