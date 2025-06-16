@@ -1,5 +1,6 @@
 import Button from './Button'
 import PropTypes from 'prop-types'
+import Comments from './Comments'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
@@ -23,12 +24,13 @@ const Blog = ({ sessionInfo }) => {
   }
 
   const blogStyle = {
-    paddingTop: 5,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
+    paddingTop: '1rem',
+    paddingLeft: '1rem',
+    borderBottom: '1px solid black',
     marginBottom: 2,
   }
+
+  const comments = blogContent.comments
 
   return (
     <div className="blog">
@@ -38,10 +40,11 @@ const Blog = ({ sessionInfo }) => {
           <strong>Author</strong>:{blogContent.author}
         </p>
         <p>
-          <strong>URL</strong>: {blogContent.url}
+          <strong>URL</strong>:{' '}
+          <a href={blogContent.url}>Click at your own peril</a>💀
         </p>
         <p>
-          <strong>{blogContent.likes}</strong> likes{' '}
+          <strong>{blogContent.likes}</strong> likes
           <Button onClick={() => handleLike(blogContent)} buttonLabel="like" />
         </p>
         {sessionInfo &&
@@ -55,6 +58,7 @@ const Blog = ({ sessionInfo }) => {
         ) : (
           <Button disabled={true} buttonLabel="delete" />
         )}
+        <Comments blog={blogContent} />
       </div>
     </div>
   )

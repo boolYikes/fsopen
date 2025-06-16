@@ -45,4 +45,41 @@ const del = async (blog) => {
   }
 }
 
-export default { getAll, create, setToken, like, del }
+const getComments = async (blog) => {
+  const config = {
+    headers: {
+      Authorization: token,
+      'Content-Type': 'application/json',
+    },
+  }
+  try {
+    const response = await axios.get(`${baseUrl}/${blog.id}/comment`, config)
+    return response.data
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+const postComment = async (payload) => {
+  const { blog, comment } = payload
+  const config = {
+    headers: {
+      Authorization: token,
+      'Content-Type': 'application/json',
+    },
+  }
+  try {
+    const response = await axios.post(
+      `${baseUrl}/${blog.id}/comment`,
+      { content: comment },
+      config,
+    )
+    return response.data
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export default { getAll, create, setToken, like, del, getComments, postComment }

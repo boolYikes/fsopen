@@ -2,6 +2,7 @@ const blogsRouter = require("express").Router();
 const middleware = require("../utils/middleware");
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const Comment = require("../models/comment");
 const jwt = require("jsonwebtoken");
 
 blogsRouter.get("/", async (req, res) => {
@@ -91,6 +92,32 @@ blogsRouter.put("/:id", middleware.userExtractor, async (req, res, next) => {
   //     { user, title, author, likes, url },
   //     { new: true, runValidators: true, context: 'query'}
   // )
+});
+
+// For comments
+blogsRouter.get("/:id/comment", async (req, res) => {
+  const blog = await Blog.findById(req.params.id).populate({
+    path: "comments",
+    select: "content blog",
+  });
+  res.status(200).json(blog.comments);
+});
+
+blogsRouter.post("/:id/comment", async (req, res) => {
+  const content = req.body.content;
+  const blog = req.params.id;
+
+  const comment = new Comment({ content: content, blog: blog });
+  const savedComment = await comment.save();
+
+  await Blog.findByIdAndUpdate(
+    blog,
+    { $push: { comments: savedComment._id } },
+    { new: true },
+  );
+
+  const populatedComment = await savedComment.populate("blog", { id: 1 });
+  res.status(201).json(populatedComment);
 });
 
 module.exports = blogsRouter;
