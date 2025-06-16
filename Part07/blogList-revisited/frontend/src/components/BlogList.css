@@ -1,0 +1,10 @@
+.blog-list-item {
+  border-left: '1px solid black';
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.blog-list-item:hover {
+  text-decoration: underline;
+  color: white;
+  background-color: black;
+}

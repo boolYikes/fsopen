@@ -4,7 +4,8 @@ import logoutService from '../services/logout'
 import blogService from '../services/blogs'
 import { onCRUDNotifyAction } from './notificationReducer'
 
-const initialState = null
+const token = window.localStorage.getItem('loggedBlogAppUser')
+const initialState = token ? JSON.parse(token) : null
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -21,9 +22,6 @@ const authSlice = createSlice({
       window.localStorage.removeItem('loggedBlogAppUser')
       blogService.setToken(null)
       return initialState
-    },
-    get(state, action) {
-      return state
     },
   },
 })
@@ -98,7 +96,7 @@ export const leaseSession = (credentials) => {
 }
 
 // actions
-export const { remove, get, set } = authSlice.actions
+export const { remove, set } = authSlice.actions
 
 // reducer
 export default authSlice.reducer

@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { login } from '../reducers/authReducer'
+import { useState } from 'react'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
@@ -16,8 +17,14 @@ const LoginForm = () => {
   }
   return (
     <>
-      <h2>You shall not pass!</h2>
-      <form onSubmit={handleLogin}>
+      <form
+        onSubmit={handleLogin}
+        style={{
+          display: 'flex',
+          paddingBottom: '4px',
+          justifyContent: 'space-between',
+        }}
+      >
         <div>
           username
           <input

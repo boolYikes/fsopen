@@ -1,13 +1,26 @@
 import Button from './Button'
-import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
-const Blog = (props) => {
-  // Must not share state with Togglable. Shoulda kept the states inside the Togglable?
-  const [vis, setVis] = useState(false)
-  const blogContent = props.blog
-  // const [likes, setLikes] = useState(0)
-  // const [liked, setLiked] = useState(false)
+const Blog = ({ sessionInfo }) => {
+  const location = useLocation()
+  const blogContent = location.state || {}
+  const dispatch = useDispatch()
+
+  const handleLike = async (blog) => {
+    dispatch(likeBlog(blog))
+  }
+  const handleDelete = async (blog) => {
+    dispatch(deleteBlog(blog))
+    dispatch(
+      onCRUDNotifyAction(
+        { content: `Deleted ${blog.title}`, type: 'warning' },
+        5000,
+      ),
+    )
+  }
 
   const blogStyle = {
     paddingTop: 5,
@@ -19,44 +32,36 @@ const Blog = (props) => {
 
   return (
     <div className="blog">
-      {!vis ? (
-        <div style={blogStyle}>
-          {blogContent.title} by {blogContent.author}{' '}
-          <Button onClick={() => setVis(!vis)} buttonLabel="show all" />
-        </div>
-      ) : (
-        <div style={blogStyle}>
-          Title: {blogContent.title}{' '}
-          <Button onClick={() => setVis(!vis)} buttonLabel="summary" />
-          <br />
-          Author: {blogContent.author} <br />
-          URL: {blogContent.url} <br />
-          Likes: {blogContent.likes}{' '}
-          <Button onClick={props.onUpdate} buttonLabel="like" />
-          <br />
-          {props.sessionInfo &&
-          blogContent.author &&
-          props.sessionInfo.username === blogContent.author ? (
-            <Button
-              disabled={false}
-              onClick={props.onDelete}
-              buttonLabel="delete"
-            />
-          ) : (
-            // ? console.log(blogContent.author)
-            <Button disabled={true} buttonLabel="delete" />
-          )}
-        </div>
-      )}
+      <div style={blogStyle}>
+        <h2>{blogContent.title}</h2>
+        <p>
+          <strong>Author</strong>:{blogContent.author}
+        </p>
+        <p>
+          <strong>URL</strong>: {blogContent.url}
+        </p>
+        <p>
+          <strong>{blogContent.likes}</strong> likes{' '}
+          <Button onClick={() => handleLike(blogContent)} buttonLabel="like" />
+        </p>
+        {sessionInfo &&
+        blogContent.author &&
+        sessionInfo.username === blogContent.author ? (
+          <Button
+            disabled={false}
+            onClick={() => handleDelete(blogContent)}
+            buttonLabel="delete"
+          />
+        ) : (
+          <Button disabled={true} buttonLabel="delete" />
+        )}
+      </div>
     </div>
   )
 }
 
 Blog.propTypes = {
   sessionInfo: PropTypes.object,
-  blog: PropTypes.object.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 }
 
 export default Blog

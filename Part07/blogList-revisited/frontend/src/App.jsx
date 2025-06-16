@@ -1,62 +1,41 @@
-import { useState, useEffect } from 'react'
-import Togglable from './components/Togglable'
-import LoginForm from './components/LoginForm'
-import PostingForm from './components/PostingForm'
+import { useEffect } from 'react'
+import { Routes, Route, useMatch, Navigate } from 'react-router-dom'
+
 import Message from './components/Message'
-import Button from './components/Button'
-import SessionTimer from './components/SessionTimer'
 import BlogList from './components/BlogList'
+import Users from './components/Users'
+import Menu from './components/Menu'
+import OwnedBlogs from './components/OwnedBlogs'
+import Blog from './components/Blog'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
-import { leaseSession, logout } from './reducers/authReducer'
+import { initUsers } from './reducers/userReducer'
+import { leaseSession } from './reducers/authReducer'
 
 const App = () => {
   const user = useSelector((state) => state.auth)
-  const [visible, setVisible] = useState(false)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
     // blog list rendering
     dispatch(initBlogs())
+    dispatch(initUsers())
     dispatch(leaseSession(user))
-  })
-
-  const hide = { display: visible ? 'none' : '' }
-  const show = { display: visible ? '' : 'none' }
-
-  const toggle = () => {
-    setVisible(!visible)
-  }
+  }, [])
 
   return (
     <div data-testid="whole">
       <h1>The King of Brutalism</h1>
+      <Menu sessionInfo={user} />
       <Message />
-      <h2>Blogs</h2>
-      {!user ? (
-        <LoginForm />
-      ) : (
-        <div>
-          <SessionTimer
-            token={
-              JSON.parse(window.localStorage.getItem('loggedBlogAppUser')).token
-            }
-          />
-          <Button onClick={() => dispatch(logout())} buttonLabel="logout" />
-          <Togglable
-            buttonLabel1="create new"
-            buttonLabel2="cancel"
-            hide={hide}
-            show={show}
-            toggle={toggle}
-          >
-            <PostingForm toggle={toggle} />
-          </Togglable>
-        </div>
-      )}
-      <BlogList user={user} />
+      <Routes>
+        <Route path="/" element={<BlogList sessionInfo={user} />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<OwnedBlogs />} />
+        <Route path="/blogs/:id" element={<Blog sessionInfo={user} />} />
+      </Routes>
     </div>
   )
 }

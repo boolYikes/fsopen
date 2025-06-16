@@ -1,0 +1,22 @@
+.menu-bar {
+  display: flex;
+  align-items: 'center';
+  justify-content: 'space-between';
+  padding: '10px 20px';
+  background-color: '#333';
+  color: '#fff';
+  font-family: 'Arial; sans-serif';
+  box-shadow: '0 2px 5px rgba(0;0;0;0.2)';
+  border-bottom: 1px solid black;
+}
+
+.menu-bar-item {
+  text-decoration: none;
+  margin: 0 15px;
+  transition: color 0.3s;
+}
+.menu-bar-item:hover {
+  text-decoration: underline;
+  color: white;
+  background-color: black;
+}
