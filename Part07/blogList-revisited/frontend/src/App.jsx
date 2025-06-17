@@ -8,6 +8,8 @@ import Menu from './components/Menu'
 import OwnedBlogs from './components/OwnedBlogs'
 import Blog from './components/Blog'
 
+import { Typography } from '@mui/material'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userReducer'
@@ -27,7 +29,7 @@ const App = () => {
 
   return (
     <div data-testid="whole">
-      <h1>The King of Brutalism</h1>
+      <Typography variant="h6">The King of Brutalism</Typography>
       <Menu sessionInfo={user} />
       <Message />
       <Routes>

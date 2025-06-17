@@ -5,6 +5,9 @@ import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import { Badge, Box, Typography } from '@mui/material'
+
 const Blog = ({ sessionInfo }) => {
   const location = useLocation()
   const blogContent = location.state || {}
@@ -23,30 +26,36 @@ const Blog = ({ sessionInfo }) => {
     )
   }
 
-  const blogStyle = {
-    paddingTop: '1rem',
-    paddingLeft: '1rem',
-    borderBottom: '1px solid black',
-    marginBottom: 2,
-  }
-
-  const comments = blogContent.comments
-
   return (
     <div className="blog">
-      <div style={blogStyle}>
-        <h2>{blogContent.title}</h2>
-        <p>
+      <div>
+        <Typography variant="h6">Blog '{blogContent.title}'</Typography>
+        <Typography>
           <strong>Author</strong>:{blogContent.author}
-        </p>
-        <p>
+        </Typography>
+        <Typography>
           <strong>URL</strong>:{' '}
           <a href={blogContent.url}>Click at your own peril</a>💀
-        </p>
-        <p>
-          <strong>{blogContent.likes}</strong> likes
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            width: 500,
+          }}
+        >
+          <Typography sx={{ paddingRight: 2, marginTop: 2 }}>
+            <strong>Likes</strong>:
+          </Typography>
+          <Badge
+            sx={{ px: 1 }}
+            badgeContent={blogContent.likes}
+            color="primary"
+          >
+            <ThumbUpIcon sx={{ px: 1 }} color="primary" />
+          </Badge>
           <Button onClick={() => handleLike(blogContent)} buttonLabel="like" />
-        </p>
+        </Box>
         {sessionInfo &&
         blogContent.author &&
         sessionInfo.username === blogContent.author ? (

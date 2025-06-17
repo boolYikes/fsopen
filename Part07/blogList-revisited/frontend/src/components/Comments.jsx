@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { addComment, getComments } from '../reducers/commentReducer'
 import { useEffect } from 'react'
+import { Divider, TextField, Typography } from '@mui/material'
 
 const Comments = ({ blog }) => {
   const comments = useSelector((state) => state.comments)
@@ -22,12 +23,21 @@ const Comments = ({ blog }) => {
 
   return (
     <div style={{ marginBottom: '1rem' }}>
-      <h4>Comments</h4>
+      <Divider />
+      <Typography variant="h6">Comments</Typography>
       {comments &&
-        comments.map((comment) => <p key={comment.id}>{comment.content}</p>)}
+        comments.map((comment) => (
+          <Typography key={comment.id}>{comment.content}</Typography>
+        ))}
 
       <form onSubmit={handleSubmit}>
-        <input name="comment" type="text" placeholder="type your comment" />
+        <TextField
+          variant="filled"
+          label="write your comment"
+          name="comment"
+          type="text"
+          placeholder="type your comment"
+        />
       </form>
     </div>
   )

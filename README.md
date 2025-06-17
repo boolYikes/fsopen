@@ -1,4 +1,8 @@
 <p><strong>Monorepo is messy...</strong></p>
+<p>Not so brutal anymore now, is it?</p>
+
+![alt text](image.png)
+
 <h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part00">Part 0</a></h2>
 <details>
     <summary><span style="color:salmon">Expand to see</span></summary>

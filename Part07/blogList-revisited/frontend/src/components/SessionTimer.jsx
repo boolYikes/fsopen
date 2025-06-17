@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+
+import { Typography } from '@mui/material'
 import PropTypes from 'prop-types'
 
 const SessionTimer = ({ token }) => {
@@ -37,9 +39,9 @@ const SessionTimer = ({ token }) => {
 
   return (
     <div>
-      <span style={{ color: '#F94C36' }}>
+      <Typography sx={{ color: 'orange' }}>
         Session expires in: {minutes}:{seconds.toString().padStart(2, '0')}
-      </span>
+      </Typography>
     </div>
   )
 }

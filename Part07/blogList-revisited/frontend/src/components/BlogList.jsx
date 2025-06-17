@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import Togglable from './Togglable'
 import PostingForm from './PostingForm'
-import './BlogList.css'
+
+import { Typography, Box, Button as MUIButton } from '@mui/material'
 
 const BlogList = ({ sessionInfo }) => {
   const blogs = useSelector((state) => state.blogs)
@@ -19,8 +21,8 @@ const BlogList = ({ sessionInfo }) => {
   }
 
   return (
-    <div>
-      <h2>Blogs</h2>
+    <Box>
+      <Typography variant="h6">Blogs</Typography>
       {sessionInfo && (
         <Togglable
           buttonLabel1="create new"
@@ -33,13 +35,35 @@ const BlogList = ({ sessionInfo }) => {
         </Togglable>
       )}
       {sortedBlogs.map((blog) => (
-        <div key={blog.id} style={{ borderBottom: '1px solid black' }}>
-          <Link to={`/blogs/:id`} className="blog-list-item" state={blog}>
-            {blog.title}
-          </Link>
-        </div>
+        <Box
+          key={blog.id}
+          sx={{
+            backgroundColor: '#fff',
+            color: 'black',
+            transition: 'background-color 0.2s ease, color 0.2s ease',
+            '&:hover': {
+              backgroundColor: 'custom.tertiary',
+              color: 'primary.main',
+              textDecoration: 'none',
+            },
+          }}
+        >
+          <MUIButton
+            variant="text"
+            component={Link}
+            to={`/blogs/:id`}
+            className="blog-list-item"
+            state={blog}
+            sx={{
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
+          >
+            <Typography>{blog.title}</Typography>
+          </MUIButton>
+        </Box>
       ))}
-    </div>
+    </Box>
   )
 }
 

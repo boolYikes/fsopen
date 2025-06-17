@@ -1,18 +1,36 @@
-import { useDispatch, useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+
+import {
+  Typography,
+  Button as MUIButton,
+  Box,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+} from '@mui/material'
 
 const User = ({ user }) => {
-  const dispatch = useDispatch()
   const totalBlogs = user.blogs.length
   return (
     <>
-      <td>
-        <Link to={`/users/${user.id}`} state={user}>
+      <TableCell>
+        <MUIButton
+          variant="text"
+          component={Link}
+          to={`/users/${user.id}`}
+          state={user}
+        >
           {user.name}
-        </Link>
-      </td>
-      <td>{totalBlogs}</td>
+        </MUIButton>
+      </TableCell>
+      <TableCell>
+        <Typography>{totalBlogs}</Typography>
+      </TableCell>
     </>
   )
 }
@@ -20,38 +38,28 @@ const User = ({ user }) => {
 const Users = () => {
   const users = useSelector((state) => state.users)
 
-  const tableStyle = {
-    borderCollapse: 'collapse',
-    width: '100%',
-    fontFamily: 'Arial, sans-serif',
-    textAlign: 'left',
-  }
-  const thStyle = {
-    borderBottom: '1px solid black',
-    padding: '4px',
-    fontWeight: 'bold',
-  }
-
   return (
-    <div>
-      <h2>Users</h2>
-      <table style={tableStyle}>
-        <thead>
-          <tr>
-            <th style={thStyle}>Name</th>
-            <th style={thStyle}>Blogs Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users &&
-            users.map((user) => (
-              <tr key={user.id}>
-                <User user={user} />
-              </tr>
-            ))}
-        </tbody>
-      </table>
-    </div>
+    <Box>
+      <Typography variant="h6">Users</Typography>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Blogs Created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users &&
+              users.map((user) => (
+                <TableRow key={user.id}>
+                  <User user={user} />
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   )
 }
 
