@@ -1,0 +1,27 @@
+{
+  "name": "books-info",
+  "version": "1.0.0",
+  "description": "library",
+  "keywords": [
+    "myap"
+  ],
+  "homepage": "https://github.com/boolYikes/fsopen#readme",
+  "bugs": {
+    "url": "https://github.com/boolYikes/fsopen/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boolYikes/fsopen.git"
+  },
+  "license": "ISC",
+  "author": "dee",
+  "type": "commonjs",
+  "main": "library-backend.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.12.2",
+    "graphql": "^16.11.0"
+  }
+}

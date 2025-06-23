@@ -76,3 +76,10 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part07/blogList-revisited">Ex7.9-7.21 Bloglist revisited</a></li>
     </ul>
 </details>
+<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part07">Part 8</a></h2>
+<details>
+    <summary><span style="color:salmon">Expand to see</span></summary>
+    <ul>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/books-info">Ex8.1-8.7 Library with GraphQL</a></li>
+    </ul>
+</details>
