@@ -18,10 +18,14 @@
   "type": "commonjs",
   "main": "library-backend.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "dev": "nodemon library-backend.js"
   },
   "dependencies": {
     "@apollo/server": "^4.12.2",
     "graphql": "^16.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

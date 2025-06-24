@@ -81,5 +81,6 @@
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/books-info">Ex8.1-8.7 Library with GraphQL</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/library-frontend">Ex8.8-8.12 Library frontend</a></li>
     </ul>
 </details>

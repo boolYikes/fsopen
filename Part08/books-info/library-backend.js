@@ -124,6 +124,7 @@ const typeDefs = `
     name: String!
     id: ID!
     born: Int
+    books: [Book]
   }
 
   type Book {
@@ -211,6 +212,11 @@ const resolvers = {
   Book: {
     author: (root) => {
       return authors.find((a) => a.name === root.author);
+    },
+  },
+  Author: {
+    books: (root) => {
+      return books.filter((b) => b.author === root.name);
     },
   },
 };
