@@ -6,12 +6,21 @@ const Nav = () => {
       <nav
         style={{
           marginBottom: '1rem',
-          textDecoration: 'none',
-          border: '1px solid black',
+          padding: '1rem',
+          backgroundColor: 'skyblue',
+          display: 'flex',
+          gap: '2rem',
         }}
       >
-        <Link to="/">authors</Link> <Link to="/books">books</Link>{' '}
-        <Link to="/add">add</Link>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          authors
+        </Link>{' '}
+        <Link to="/books" style={{ textDecoration: 'none' }}>
+          books
+        </Link>{' '}
+        <Link to="/add" style={{ textDecoration: 'none' }}>
+          add
+        </Link>
       </nav>
     </div>
   )

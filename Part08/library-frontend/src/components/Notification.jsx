@@ -3,7 +3,7 @@ const Notification = ({ errorMessage }) => {
     return null
   }
   return (
-    <div style={{ color: 'red', backgroundColor: 'salmon' }}>
+    <div style={{ color: 'black', backgroundColor: 'salmon' }}>
       {errorMessage}
     </div>
   )

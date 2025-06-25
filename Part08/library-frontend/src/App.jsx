@@ -26,7 +26,10 @@ const App = () => {
       <Nav />
       <Notification errorMessage={errorMessage} />
       <Routes>
-        <Route path="/" element={<Authors result={allAuthorsResult} />} />
+        <Route
+          path="/"
+          element={<Authors result={allAuthorsResult} noti={notify} />}
+        />
         <Route path="/books" element={<Books result={allBooksResult} />} />
         <Route path="/add" element={<NewBook setError={notify} />} />
       </Routes>
