@@ -66,3 +66,29 @@ export const UPDATE_BIRTH = gql`
     }
   }
 `
+
+// value is a token
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      value
+    }
+  }
+`
+
+export const CREATE_USER = gql`
+  mutation createUser(
+    $username: String!
+    $password: String!
+    $favoriteGenre: String
+  ) {
+    createUser(
+      username: $username
+      password: $password
+      favoriteGenre: $favoriteGenre
+    ) {
+      username
+      favoriteGenre
+    }
+  }
+`

@@ -1,6 +1,20 @@
+import { useApolloClient } from '@apollo/client'
 import { Link } from 'react-router-dom'
 
-const Nav = () => {
+const Nav = ({ token, setToken, setMessage }) => {
+  const linkStyle = {
+    textDecoration: 'none',
+  }
+
+  const client = useApolloClient()
+
+  const handleLogout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
+    setMessage('Bye!')
+  }
+
   return (
     <div>
       <nav
@@ -12,15 +26,26 @@ const Nav = () => {
           gap: '2rem',
         }}
       >
-        <Link to="/" style={{ textDecoration: 'none' }}>
+        <Link to="/" style={linkStyle}>
           authors
         </Link>{' '}
-        <Link to="/books" style={{ textDecoration: 'none' }}>
+        <Link to="/books" style={linkStyle}>
           books
         </Link>{' '}
-        <Link to="/add" style={{ textDecoration: 'none' }}>
-          add
-        </Link>
+        {token ? (
+          <>
+            <Link to="/add" style={linkStyle}>
+              add
+            </Link>
+            <a style={linkStyle} href="#" onClick={handleLogout}>
+              logout
+            </a>
+          </>
+        ) : (
+          <Link to="/login" style={linkStyle}>
+            login
+          </Link>
+        )}
       </nav>
     </div>
   )

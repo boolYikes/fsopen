@@ -11,9 +11,37 @@ const NewBook = ({ setError }) => {
 
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    // update: (cache, { data: { addBook } }) => {
+    //   const existingBooks = cache.readQuery({ query: ALL_BOOKS })
+    //   if (existingBooks) {
+    //     cache.writeQuery({
+    //       query: ALL_BOOKS,
+    //       data: {
+    //         allBooks: [...existingBooks.allBooks, addBook],
+    //       },
+    //     })
+    //   }
+
+    //   const existingAuthors = cache.readQuery({ query: ALL_AUTHORS })
+    //   if (
+    //     existingAuthors &&
+    //     !existingAuthors.allAuthors.find((a) => a.id === addBook.author.id)
+    //   ) {
+    //     cache.writeQuery({
+    //       query: ALL_AUTHORS,
+    //       data: {
+    //         allAuthors: [...existingAuthors.allAuthors, addBook.author],
+    //       },
+    //     })
+    //   }
+    // },
     onError: (e) => {
       const messages = e.graphQLErrors.map((err) => err.message).join('\n')
       setError(messages)
+    },
+    onCompleted: (d) => {
+      // name is confusing. it is not an error
+      setError('Book added!')
     },
   })
 

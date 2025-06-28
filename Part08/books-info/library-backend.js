@@ -111,7 +111,7 @@ const resolvers = {
         throw new GraphQLError('No such user', {
           extensions: {
             code: 'BAD_USER_INPUT',
-            invalidArgs: args.author,
+            invalidArgs: args.username,
           },
         })
       }
@@ -120,7 +120,7 @@ const resolvers = {
         throw new GraphQLError('Wrong password', {
           extensions: {
             code: 'BAD_USER_INPUT',
-            invalidArgs: args.author,
+            invalidArgs: args.password,
           },
         })
       }
@@ -172,13 +172,19 @@ const resolvers = {
         let author = await Author.findOne({ name: args.author })
 
         if (!author) {
-          author = new Author({ name: args.author })
+          author = new Author({ name: args.author, books: [] })
           await author.save()
         }
 
         const newBook = new Book({ ...args, author: author._id })
-        const populated = await newBook.populate('author')
-        return await populated.save()
+        await newBook.save()
+
+        author.books.push(newBook._id)
+        await author.save()
+
+        await newBook.populate('author')
+        return newBook
+
         // other errors that are not explicitly handled
         // Although I think error handling should be done by a middleware? ...
       } catch (e) {
@@ -219,10 +225,14 @@ const resolvers = {
     },
     authorCount: async () => await Author.collection.countDocuments(),
     bookCount: async () => await Book.collection.countDocuments(),
-    allBooks: async () => await Book.find({}),
+    allBooks: async () => {
+      const res = await Book.find({}).populate('author')
+      return res
+    },
     allAuthors: async (root, args) => {
       if (!args.born) {
-        return await Author.find({})
+        const result = await Author.find({}).populate('books')
+        return result
       }
       return await Author.find({ born: { $exists: args.born === 'YES' } })
     },
@@ -250,14 +260,16 @@ const resolvers = {
   },
   Book: {
     author: (root) => {
-      return { name: root.author.name, born: root.author.born }
+      return {
+        name: root.author.name,
+        born: root.author.born,
+        id: root.id.toString(),
+      }
     },
   },
-  // Author: {
-  //   books: (root) => {
-  //     return books.filter((b) => b.author === root.name)
-  //   },
-  // },
+  Author: {
+    id: (root) => root.id.toString(),
+  },
 }
 
 const server = new ApolloServer({

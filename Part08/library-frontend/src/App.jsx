@@ -7,9 +7,12 @@ import { Routes, Route } from 'react-router-dom'
 import { ALL_AUTHORS, ALL_BOOKS } from './utils/queries'
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
+import LoginForm from './components/LoginForm'
+import SignUp from './components/SignUp'
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
+  const [token, setToken] = useState(null)
 
   const allAuthorsResult = useQuery(ALL_AUTHORS)
   const allBooksResult = useQuery(ALL_BOOKS)
@@ -23,7 +26,7 @@ const App = () => {
 
   return (
     <div>
-      <Nav />
+      <Nav token={token} setToken={setToken} setMessage={notify} />
       <Notification errorMessage={errorMessage} />
       <Routes>
         <Route
@@ -32,6 +35,13 @@ const App = () => {
         />
         <Route path="/books" element={<Books result={allBooksResult} />} />
         <Route path="/add" element={<NewBook setError={notify} />} />
+        <Route
+          path="/login"
+          element={
+            <LoginForm setToken={setToken} token={token} setMessage={notify} />
+          }
+        />
+        <Route path="/signup" element={<SignUp setMessage={notify} />} />
       </Routes>
     </div>
   )

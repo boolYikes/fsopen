@@ -25,12 +25,12 @@ const bookSchema = new mongoose.Schema({
   },
 })
 
-bookSchema.set('toJSON', {
-  transform: (doc, returnedObj) => {
-    returnedObj.id = returnedObj._id.toString()
-    delete returnedObj._id
-    delete returnedObj.__v
-  },
-})
+// bookSchema.set('toJSON', {
+//   transform: (doc, returnedObj) => {
+//     returnedObj.id = returnedObj._id.toString()
+//     delete returnedObj._id
+//     delete returnedObj.__v
+//   },
+// })
 
 module.exports = mongoose.model('Book', bookSchema)
