@@ -5,7 +5,7 @@ import { UPDATE_BIRTH } from '../utils/queries'
 const UpdateAuthor = ({ noti, authors }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  const [selected, setSelected] = useState(authors[0].name)
+  const [selected, setSelected] = useState(authors[0]?.name)
 
   const [updateBirth, result] = useMutation(UPDATE_BIRTH, {
     onError: (e) => {

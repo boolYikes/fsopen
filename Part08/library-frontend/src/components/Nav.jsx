@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client'
 import { Link } from 'react-router-dom'
 
-const Nav = ({ token, setToken, setMessage }) => {
+const Nav = ({ token, setUserInfo, setMessage }) => {
   const linkStyle = {
     textDecoration: 'none',
   }
@@ -9,7 +9,7 @@ const Nav = ({ token, setToken, setMessage }) => {
   const client = useApolloClient()
 
   const handleLogout = () => {
-    setToken(null)
+    setUserInfo(null)
     localStorage.clear()
     client.resetStore()
     setMessage('Bye!')

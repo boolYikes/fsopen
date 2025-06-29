@@ -3,7 +3,7 @@ import { useApolloClient, useMutation } from '@apollo/client'
 import { LOGIN } from '../utils/queries'
 import { useNavigate } from 'react-router-dom'
 
-const LoginForm = ({ token, setToken, setMessage }) => {
+const LoginForm = ({ token, setUserInfo, setMessage }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -27,15 +27,15 @@ const LoginForm = ({ token, setToken, setMessage }) => {
 
   useEffect(() => {
     if (result.data) {
-      const tk = result.data.login.value
-      setToken(tk)
-      localStorage.setItem('library-user-token', tk)
+      const userInfo = result.data.login
+      localStorage.setItem('library-user-info', JSON.stringify(userInfo))
+      setUserInfo(userInfo)
     }
   }, [result.data])
 
   // Logged in view & Logout
   const handleLogout = () => {
-    setToken(null)
+    setUserInfo(null)
     localStorage.clear()
     client.resetStore()
   }

@@ -8,7 +8,10 @@ const userSchema = new mongoose.Schema({
     minLength: 3,
   },
   password: { type: String, required: true },
-  favoriteGenre: String,
+  favoriteGenre: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Genre',
+  },
 })
 
 // userSchema.set('toJSON', {

@@ -11,6 +11,7 @@ const { GraphQLError } = require('graphql')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
+const Genre = require('./models/genre')
 
 require('dotenv').config()
 const MONGODB_URI = process.env.URI
@@ -27,11 +28,20 @@ mongoose
 const typeDefs = `
   type User {
     username: String!
-    favoriteGenre: String!
+    favoriteGenre: String
     id: ID!
   }
-  type Token {
+
+  type Genre {
+    name: String!
+    books: [Book]
+    id: ID!
+  }
+
+  type AuthUser {
     value: String!
+    username: String!
+    favoriteGenre: String
   }
   
   type Mutation {
@@ -50,7 +60,7 @@ const typeDefs = `
     login(
       username: String!
       password: String!
-    ): Token
+    ): AuthUser
   }
 
   type Query {
@@ -58,6 +68,8 @@ const typeDefs = `
     authorCount: Int
     allBooks: [Book!]!
     allAuthors(born: YesNo): [Author!]!
+    allGenres: [Genre]
+    findBooksByGenre(id: String): Genre
     findBooks(author: String, genre: String): [Book]
     me: User
   }
@@ -74,7 +86,7 @@ const typeDefs = `
     published: Int
     author: Author!
     id: ID!
-    genres: [String!]
+    genres: [Genre]
   }
 
   enum YesNo {
@@ -87,13 +99,28 @@ const resolvers = {
   Mutation: {
     createUser: async (root, args) => {
       const pwHash = await bcrypt.hash(args.password, 16)
-      const newUser = args.favoriteGenre
-        ? new User({
+      let newUser
+      if (args.favoriteGenre) {
+        const existingGenre = await Genre.findOne({ name: args.favoriteGenre })
+        if (existingGenre) {
+          newUser = new User({
             username: args.username,
             password: pwHash,
-            favoriteGenre: args.favoriteGenre,
+            favoriteGenre: existingGenre._id,
           })
-        : new User({ username: args.username, password: pwHash })
+        } else {
+          // if its a new genre
+          const newGenre = new Genre({ name: args.favoriteGenre })
+          await newGenre.save()
+          newUser = new User({
+            username: args.username,
+            password: pwHash,
+            favoriteGenre: newGenre._id,
+          })
+        }
+      } else {
+        newUser = new User({ username: args.username, password: pwHash })
+      }
 
       return newUser.save().catch((e) => {
         throw new GraphQLError('User creation failed', {
@@ -106,7 +133,9 @@ const resolvers = {
       })
     },
     login: async (root, args) => {
-      const user = await User.findOne({ username: args.username })
+      const user = await User.findOne({ username: args.username }).populate(
+        'favoriteGenre'
+      )
       if (!user) {
         throw new GraphQLError('No such user', {
           extensions: {
@@ -128,7 +157,11 @@ const resolvers = {
         username: user.username,
         id: user._id,
       }
-      return { value: jwt.sign(userForToken, process.env.SEKRET) }
+      return {
+        username: user.username,
+        favoriteGenre: user.favoriteGenre?.name,
+        value: jwt.sign(userForToken, process.env.SEKRET),
+      }
     },
     addBook: async (root, args, context) => {
       const currentUser = context.currentUser
@@ -177,6 +210,22 @@ const resolvers = {
         }
 
         const newBook = new Book({ ...args, author: author._id })
+
+        const genresForNewBook = [] // map ignores await apparently...
+        for (const genre of args.genres || []) {
+          const genreFound = await Genre.findOne({ name: genre })
+          if (genreFound) {
+            genresForNewBook.push(genreFound._id)
+            genreFound.books.push(newBook._id)
+            await genreFound.save()
+          } else {
+            const newGenre = new Genre({ name: genre, books: [newBook._id] })
+            genresForNewBook.push(newGenre._id)
+            await newGenre.save()
+          }
+        }
+        newBook.genres = genresForNewBook
+
         await newBook.save()
 
         author.books.push(newBook._id)
@@ -225,7 +274,13 @@ const resolvers = {
     },
     authorCount: async () => await Author.collection.countDocuments(),
     bookCount: async () => await Book.collection.countDocuments(),
+    allGenres: async () => {
+      // return id and name
+      const res = await Genre.find({}).select('name')
+      return res
+    },
     allBooks: async () => {
+      // not used
       const res = await Book.find({}).populate('author')
       return res
     },
@@ -235,6 +290,17 @@ const resolvers = {
         return result
       }
       return await Author.find({ born: { $exists: args.born === 'YES' } })
+    },
+    findBooksByGenre: async (root, args) => {
+      if (!args.id) {
+        const res = await Book.find({}).populate('author')
+        return { books: res, name: '', id: '' }
+      }
+      const genre = await Genre.findById(args.id).populate({
+        path: 'books',
+        populate: { path: 'author' },
+      })
+      return genre
     },
     findBooks: async (root, args) => {
       const author = await Author.findOne({ name: args.author })
@@ -268,6 +334,9 @@ const resolvers = {
     },
   },
   Author: {
+    id: (root) => root.id.toString(),
+  },
+  Genre: {
     id: (root) => root.id.toString(),
   },
 }

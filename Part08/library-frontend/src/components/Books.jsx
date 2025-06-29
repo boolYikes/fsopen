@@ -1,7 +1,15 @@
 const Books = ({ result }) => {
+  if (!result.data) {
+    return <div>No books to display</div>
+  }
+
   if (result.loading) {
     return <div>...loading...</div>
   }
+
+  const booksToShow = result.data.allBooks
+    ? result.data.allBooks
+    : result.data.findBooksByGenre.books
 
   return (
     <div>
@@ -14,7 +22,7 @@ const Books = ({ result }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {result.data.allBooks.map((a) => (
+          {booksToShow.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

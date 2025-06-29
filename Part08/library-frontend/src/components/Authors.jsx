@@ -1,6 +1,9 @@
 import UpdateAuthor from './UpdateAuthor'
 
 const Authors = ({ result, noti }) => {
+  if (!result.data) {
+    return <div>No authors to display</div>
+  }
   if (result.loading) {
     return <div>...loading...</div>
   }
