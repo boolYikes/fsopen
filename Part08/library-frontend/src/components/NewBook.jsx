@@ -15,14 +15,25 @@ const NewBook = ({ setError, filter }) => {
   const [genres, setGenres] = useState([])
 
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [
-      {
-        query: FIND_BOOKS_BY_GENRE,
-        variables: filter ? { id: filter } : undefined,
-      },
-      { query: ALL_AUTHORS },
-      { query: ALL_GENRES },
-    ],
+    refetchQueries: (mutResult) => {
+      // the query may be tweaked to take both a string and a list of strings...
+      let refetchList = []
+      for (const genre of mutResult.data.addBook.genres) {
+        refetchList.push({
+          query: FIND_BOOKS_BY_GENRE,
+          variables: { id: genre },
+        })
+      }
+      return [
+        ...refetchList,
+        {
+          query: FIND_BOOKS_BY_GENRE, // for previously selected filter ux & rerender
+          variables: filter ? { id: filter } : undefined,
+        },
+        { query: ALL_AUTHORS },
+        { query: ALL_GENRES },
+      ]
+    },
     // update: (cache, { data: { addBook } }) => {
     //   const existingBooks = cache.readQuery({ query: ALL_BOOKS })
     //   if (existingBooks) {

@@ -232,6 +232,7 @@ const resolvers = {
         await author.save()
 
         await newBook.populate('author')
+        // await newBook.populate('genres')
         return newBook
 
         // other errors that are not explicitly handled
