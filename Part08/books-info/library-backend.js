@@ -159,7 +159,7 @@ const resolvers = {
       }
       return {
         username: user.username,
-        favoriteGenre: user.favoriteGenre?.name,
+        favoriteGenre: user.favoriteGenre?._id,
         value: jwt.sign(userForToken, process.env.SEKRET),
       }
     },

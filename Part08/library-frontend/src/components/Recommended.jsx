@@ -1,4 +1,6 @@
-const Books = ({ result }) => {
+// probably can reuse the Book component...
+
+const Recommended = ({ result }) => {
   if (!result.data) {
     return <div>No books to display</div>
   }
@@ -7,12 +9,12 @@ const Books = ({ result }) => {
     return <div>...loading...</div>
   }
 
-  const booksToShow = result.data.findBooksByGenre.books
+  const info = result.data.findBooksByGenre
 
   return (
     <div>
-      <h2>books</h2>
-
+      <h2>recommended for you</h2>
+      <h3>based on your genre preference '{info.name}'</h3>
       <table style={{ textAlign: 'right' }}>
         <tbody>
           <tr>
@@ -20,7 +22,7 @@ const Books = ({ result }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {booksToShow.map((a) => (
+          {info.books.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -33,4 +35,4 @@ const Books = ({ result }) => {
   )
 }
 
-export default Books
+export default Recommended

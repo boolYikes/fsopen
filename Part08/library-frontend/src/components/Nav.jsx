@@ -34,6 +34,9 @@ const Nav = ({ token, setUserInfo, setMessage }) => {
         </Link>{' '}
         {token ? (
           <>
+            <Link to="/recommend" style={linkStyle}>
+              recommend
+            </Link>
             <Link to="/add" style={linkStyle}>
               add
             </Link>

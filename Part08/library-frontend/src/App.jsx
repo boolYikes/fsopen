@@ -10,10 +10,11 @@ import { useState } from 'react'
 import LoginForm from './components/LoginForm'
 import SignUp from './components/SignUp'
 import Filters from './components/Filters'
+import Recommended from './components/Recommended'
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
-  const [userInfo, setUserInfo] = useState(null)
+  const [userInfo, setUserInfo] = useState(null) // not used at this point. but if we were to use useEffect ...?
   const [filter, setFilter] = useState(null)
 
   const allAuthorsResult = useQuery(ALL_AUTHORS)
@@ -26,10 +27,16 @@ const App = () => {
     setErrorMessage(msg)
     setTimeout(() => {
       setErrorMessage(null)
-    }, 10000)
+    }, 5000)
   }
 
-  const token = JSON.parse(localStorage.getItem('library-user-info'))?.value
+  const user = JSON.parse(localStorage.getItem('library-user-info'))
+  const token = user?.value
+  // The hook is consistently called but not the query -> the code of hooks is adhered to
+  const recommendation = useQuery(FIND_BOOKS_BY_GENRE, {
+    variables: { id: user?.favoriteGenre },
+    skip: !user,
+  })
 
   return (
     <div>
@@ -68,6 +75,10 @@ const App = () => {
           }
         />
         <Route path="/signup" element={<SignUp setMessage={notify} />} />
+        <Route
+          path="/recommend"
+          element={<Recommended result={recommendation} />}
+        />
       </Routes>
     </div>
   )

@@ -34,7 +34,6 @@ const Filters = ({ result, setFilter, filter }) => {
               checked={filter === genre.id}
               value={genre.id}
               onChange={(e) => {
-                console.log(e.target.value)
                 setFilter(e.target.value)
               }}
             />
