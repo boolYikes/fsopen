@@ -80,9 +80,14 @@
 <details>
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
+        <li>Note 1: `useServer` must be imported like this: require('graphql-ws/use/ws')</li>
+        <li>Note 2: Not `pubsub.asyncIterator` but `pubsub.asyncIterableIterator`</li>
+        <li>Note 3: Since the use of non-standalone server, you must manually go to the <a href="https://studio.apollographql.com/sandbox/explorer">sandbox url</a> for the backend UI</li>
+        <li>Note 4: n+1 was solved by populating books and then measuring length of the books attrib</li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/books-info">Ex8.1-8.7 Library with GraphQL</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/library-frontend">Ex8.8-8.12 Library frontend</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/books-info">Ex8.13-8.16 Library DB</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/library-frontend">Ex8.17-8.22 Library login & filter</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/library-frontend">Ex8.23-8.26 Library pub-sub</a></li>
     </ul>
 </details>

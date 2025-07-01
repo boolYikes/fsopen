@@ -11,6 +11,7 @@ import LoginForm from './components/LoginForm'
 import SignUp from './components/SignUp'
 import Filters from './components/Filters'
 import Recommended from './components/Recommended'
+import Subscription from './components/Subscription'
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
@@ -80,6 +81,7 @@ const App = () => {
           element={<Recommended result={recommendation} />}
         />
       </Routes>
+      <Subscription token={token} />
     </div>
   )
 }

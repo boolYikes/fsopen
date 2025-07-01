@@ -15,8 +15,8 @@ const NewBook = ({ setError, filter }) => {
   const [genres, setGenres] = useState([])
 
   const [addBook] = useMutation(ADD_BOOK, {
+    // refetch is network request, update is cache update. faster but less idempotent?
     refetchQueries: (mutResult) => {
-      // the query may be tweaked to take both a string and a list of strings...
       let refetchList = []
       for (const genre of mutResult.data.addBook.genres) {
         refetchList.push({

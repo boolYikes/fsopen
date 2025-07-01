@@ -1,5 +1,32 @@
 import { gql } from '@apollo/client'
 
+// use with ${} in other queries
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    id
+    title
+    author {
+      name
+      id
+      born
+    }
+    published
+    genres {
+      id
+      name
+    }
+  }
+`
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
+`
+
 export const ALL_AUTHORS = gql`
   query {
     allAuthors {
@@ -42,19 +69,10 @@ export const ADD_BOOK = gql`
       genres: $genres
       published: $published
     ) {
-      id
-      title
-      author {
-        name
-        id
-        born
-      }
-      published
-      genres {
-        id
-      }
+      ...BookDetails
     }
   }
+  ${BOOK_DETAILS}
 `
 
 export const UPDATE_BIRTH = gql`
