@@ -76,7 +76,7 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part07/blogList-revisited">Ex7.9-7.21 Bloglist revisited</a></li>
     </ul>
 </details>
-<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part07">Part 8</a></h2>
+<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part08">Part 8</a></h2>
 <details>
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
