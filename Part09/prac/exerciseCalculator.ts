@@ -1,3 +1,5 @@
+import { argParse } from "./helper";
+
 interface TrainingEval {
   periodLength: number;
   trainingDays: number;
@@ -51,4 +53,16 @@ const calculateExercises = (
   return evalResult;
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const parseResult = argParse(process.argv);
+  if ("dailyHours" in parseResult) {
+    const { dailyHours, target } = parseResult;
+    console.log(calculateExercises(dailyHours, target));
+  } else {
+    throw new Error("This cannot happen");
+  }
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}

@@ -91,3 +91,11 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/library-frontend">Ex8.23-8.26 Library pub-sub</a></li>
     </ul>
 </details>
+<h2><a href="https://github.com/boolYikes/fsopen/tree/main/Part09">Part 9</a></h2>
+<details>
+    <summary><span style="color:salmon">Expand to see</span></summary>
+    <ul>
+        <li>Note 1: Added tags to commits</li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/books-info">Ex9.1-9.3 TS newb!</a></li>
+    </ul>
+</details>
