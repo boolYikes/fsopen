@@ -15,19 +15,24 @@ const getBMI = (weight: number, height: number): BMIResult => {
   return `${result} range`;
 };
 
-try {
-  const parseResult = argParse(process.argv);
-  if ("weight" in parseResult) {
-    // another narrowing
-    const { weight, height } = parseResult;
-    console.log(getBMI(weight, height));
-  } else {
-    throw new Error("What could possibly have gone wrong?");
+if (require.main === module) {
+  try {
+    const parseResult = argParse(process.argv);
+    console.log(parseResult);
+    if ("weight" in parseResult) {
+      // another narrowing
+      const { weight, height } = parseResult;
+      console.log(getBMI(weight, height));
+    } else {
+      throw new Error("What could possibly have gone wrong?");
+    }
+  } catch (error: unknown) {
+    let errorMessage = "Nooooo";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-} catch (error: unknown) {
-  let errorMessage = "Nooooo";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
-  }
-  console.log(errorMessage);
 }
+
+export default getBMI;
