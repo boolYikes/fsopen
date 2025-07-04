@@ -96,6 +96,10 @@
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
         <li>Note 1: Added tags to commits</li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/main/Part08/books-info">Ex9.1-9.3 TS newb!</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.1">Ex9.1 Body mass index</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.2">Ex9.2 Exercise calculator</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.3">Ex9.3 Command line</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.4">Ex9.4 Express</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.5">Ex9.5 WebBMI</a></li>
     </ul>
 </details>
