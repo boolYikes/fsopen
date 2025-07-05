@@ -3,7 +3,8 @@
     "alwaysStrict": true,
     "declaration": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -13,7 +14,7 @@
     // "strict": true,
     "strictBindCallApply": true,
     "strictNullChecks": true,
-    "strictPropertyInitialization": true
-    // "target": "ES2024"
+    "strictPropertyInitialization": true,
+    "target": "es2022"
   }
 }

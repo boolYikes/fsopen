@@ -24,7 +24,7 @@ export const argParse = (args: string[]): ParseResult => {
       throw new Error("Not valid numbers");
     }
   } else {
-    const parsed = JSON.parse(args[2]);
+    const parsed = JSON.parse(args[2]) as number[];
     if (Array.isArray(parsed) && !isNaN(Number(args[3]))) {
       return {
         dailyHours: parsed,

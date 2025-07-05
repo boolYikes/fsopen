@@ -14,7 +14,7 @@ const calculateExercises = (
   dailyHoursInAWeek: number[],
   target: number
 ): TrainingEval => {
-  let evalResult = {
+  const evalResult = {
     periodLength: 0,
     trainingDays: 0,
     success: false,
