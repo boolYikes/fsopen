@@ -10,7 +10,7 @@ interface TrainingEval {
   average: number;
 }
 
-const calculateExercises = (
+export const calculateExercises = (
   dailyHoursInAWeek: number[],
   target: number
 ): TrainingEval => {
@@ -53,16 +53,18 @@ const calculateExercises = (
   return evalResult;
 };
 
-try {
-  const parseResult = argParse(process.argv);
-  if ("dailyHours" in parseResult) {
-    const { dailyHours, target } = parseResult;
-    console.log(calculateExercises(dailyHours, target));
-  } else {
-    throw new Error("This cannot happen");
-  }
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log(error.message);
+if (require.main === module) {
+  try {
+    const parseResult = argParse(process.argv);
+    if ("daily_exercises" in parseResult) {
+      const { daily_exercises, target } = parseResult;
+      console.log(calculateExercises(daily_exercises, target));
+    } else {
+      throw new Error("This cannot happen");
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
   }
 }

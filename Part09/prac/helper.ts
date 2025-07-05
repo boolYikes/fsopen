@@ -1,5 +1,5 @@
-interface TrainingInput {
-  dailyHours: number[];
+export interface TrainingInput {
+  daily_exercises: number[];
   target: number;
 }
 
@@ -27,7 +27,7 @@ export const argParse = (args: string[]): ParseResult => {
     const parsed = JSON.parse(args[2]) as number[];
     if (Array.isArray(parsed) && !isNaN(Number(args[3]))) {
       return {
-        dailyHours: parsed,
+        daily_exercises: parsed,
         target: Number(args[3]),
       };
     } else {
