@@ -101,7 +101,9 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.3">Ex9.3 Command line</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.4">Ex9.4 Express</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.5">Ex9.5 WebBMI</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.5">Ex9.6 Eslint</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.5">Ex9.7 WebExercises</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.6">Ex9.6 Eslint</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.7">Ex9.7 WebExercises</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.8">Ex9.8 Patientor backend 1</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.9">Ex9.9 Patientor backend 2</a></li>
     </ul>
 </details>
