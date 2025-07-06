@@ -96,14 +96,15 @@
     <summary><span style="color:salmon">Expand to see</span></summary>
     <ul>
         <li>Note 1: Added tags to commits</li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.1">Ex9.1 Body mass index</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.2">Ex9.2 Exercise calculator</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.3">Ex9.3 Command line</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.4">Ex9.4 Express</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.5">Ex9.5 WebBMI</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.6">Ex9.6 Eslint</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.7">Ex9.7 WebExercises</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.8">Ex9.8 Patientor backend 1</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.9">Ex9.9 Patientor backend 2</a></li>
+        <li>Note 2: Ignore the commit messages that says "part10".</li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.1/Part09/prac">Ex9.1 Body mass index</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.2/Part09/prac">Ex9.2 Exercise calculator</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.3/Part09/prac">Ex9.3 Command line</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.4/Part09/prac">Ex9.4 Express</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.5/Part09/prac">Ex9.5 WebBMI</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.6/Part09/prac">Ex9.6 Eslint</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.7/Part09/prac">Ex9.7 WebExercises</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.8/Part09/patientor/patientor_back">Ex9.8 Patientor backend 1</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.9/Part09/patientor">Ex9.9 Patientor backend 2</a></li>
     </ul>
 </details>
