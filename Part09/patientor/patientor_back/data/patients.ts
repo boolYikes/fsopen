@@ -1,4 +1,5 @@
 import { Patient } from "../src/types";
+import patientValidator from "../src/utils";
 
 const data: Patient[] = [
   {
@@ -43,4 +44,10 @@ const data: Patient[] = [
   },
 ];
 
-export default data;
+const validated: Patient[] = data.map((obj) => {
+  const object = patientValidator(obj) as Patient;
+  object.id = obj.id;
+  return object;
+});
+
+export default validated;

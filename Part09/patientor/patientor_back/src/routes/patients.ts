@@ -2,6 +2,7 @@ import express from "express";
 import { Response } from "express";
 import { PatientSSNExcluded } from "../types";
 import patientService from "../services/patientService";
+import validateRequest from "../utils";
 
 const router = express.Router();
 
@@ -20,17 +21,18 @@ router.get("/:id", (req, res) => {
   }
 });
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 router.post("/", (req, res) => {
-  const { name, ssn, dateOfBirth, occupation, gender } = req.body;
-  const addedPatient = patientService.addPatient({
-    name,
-    ssn,
-    dateOfBirth,
-    occupation,
-    gender,
-  });
-  res.json(addedPatient);
+  try {
+    const validated = validateRequest(req.body);
+    const addedPatient = patientService.addPatient(validated);
+    res.json(addedPatient);
+  } catch (error: unknown) {
+    let errorMessage = "No";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
 });
 
 export default router;
