@@ -10,8 +10,27 @@ router.get("/", (_req, res: Response<PatientSSNExcluded[]>) => {
   res.status(200).json(allPatients);
 });
 
-router.post("/", (_req, res) => {
-  res.send("saved patient");
+router.get("/:id", (req, res) => {
+  const patient = patientService.findById(req.params.id);
+
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+router.post("/", (req, res) => {
+  const { name, ssn, dateOfBirth, occupation, gender } = req.body;
+  const addedPatient = patientService.addPatient({
+    name,
+    ssn,
+    dateOfBirth,
+    occupation,
+    gender,
+  });
+  res.json(addedPatient);
 });
 
 export default router;
