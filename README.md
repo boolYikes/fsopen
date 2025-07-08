@@ -106,7 +106,9 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.7/Part09/prac">Ex9.7 WebExercises</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.8/Part09/patientor/patientor_back">Ex9.8 Patientor backend 1</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.9/Part09/patientor">Ex9.9 Patientor backend 2</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.10/Part09/patientor">Ex9.9 Patientor backend 3</a></li>
-        <li><a href="https://github.com/boolYikes/fsopen/tree/9.11/Part09/patientor">Ex9.9 Patientor backend 4</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.10/Part09/patientor">Ex9.10 Patientor backend 3</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.11/Part09/patientor">Ex9.11 Patientor backend 4</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.12/Part09/patientor">Ex9.12 Patientor backend 5</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.13/Part09/patientor">Ex9.13 Patientor backend 6</a></li>
     </ul>
 </details>
