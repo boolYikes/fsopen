@@ -1,8 +1,8 @@
-import express from "express";
-import { Response } from "express";
-import { PatientSSNExcluded } from "../types";
+import express, { NextFunction, Request, Response } from "express";
+import { NewPatient, Patient, PatientSSNExcluded } from "../types";
 import patientService from "../services/patientService";
-import validateRequest from "../utils";
+import { NewPatientSchema } from "../utils";
+import z from "zod";
 
 const router = express.Router();
 
@@ -21,18 +21,36 @@ router.get("/:id", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+// middleware... in a separate file?
+const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   try {
-    const validated = validateRequest(req.body);
-    const addedPatient = patientService.addPatient(validated);
-    res.json(addedPatient);
+    NewPatientSchema.parse(req.body);
+    next();
   } catch (error: unknown) {
-    let errorMessage = "No";
-    if (error instanceof Error) {
-      errorMessage += " Error: " + error.message;
-    }
-    res.status(400).send(errorMessage);
+    next(error);
   }
-});
+};
+const errorMiddleware = (
+  error: unknown,
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (error instanceof z.ZodError) {
+    res.status(400).send({ error: error.issues });
+  } else {
+    next(error);
+  }
+};
+router.post(
+  "/",
+  newPatientParser,
+  (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
+    const addedPatient = patientService.addPatient(req.body);
+    res.json(addedPatient);
+  }
+);
+
+router.use(errorMiddleware);
 
 export default router;
