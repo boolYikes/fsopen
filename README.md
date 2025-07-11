@@ -112,5 +112,6 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.13/Part09/patientor">Ex9.13 Patientor backend 6</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.14/Part09/patientor">Ex9.14 Patientor backend 7</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.15/Part09/react-ts">Ex9.15 Vite with Typescript</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.16/Part09/react-ts">Ex9.16</a></li>
     </ul>
 </details>
