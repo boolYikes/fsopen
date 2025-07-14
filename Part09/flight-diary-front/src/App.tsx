@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import diaryService from "./services/diary";
 import type { Diary } from "./types";
+import AddLogForm from "./components/AddLogForm";
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -12,6 +13,12 @@ function App() {
     };
     void getAllDiaries();
   }, []);
+
+  const handleAdd = (diary: Diary) => {
+    // *post service and validation to be added here*
+    const newDiaries = diaries.concat(diary);
+    setDiaries(newDiaries);
+  };
 
   return (
     <div>
@@ -38,6 +45,7 @@ function App() {
           })}
         </tbody>
       </table>
+      <AddLogForm entriesLength={diaries.length} handleAdd={handleAdd} />
     </div>
   );
 }

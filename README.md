@@ -114,5 +114,6 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.15/Part09/react-ts">Ex9.15 Vite with Typescript</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.16/Part09/react-ts">Ex9.16</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.17/Part09/flight-diary-front">Ex9.17 Flight diary frontend</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.18/Part09/flight-diary-front">Ex9.18 Flight diary add entry</a></li>
     </ul>
 </details>
