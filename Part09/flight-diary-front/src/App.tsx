@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
-import diaryService from "./services/diary";
-import type { Diary } from "./types";
+import diaryService from "./services/diaryService";
+import type { Diary, NewDiary, Notification } from "./types";
 import AddLogForm from "./components/AddLogForm";
+import NotiComponent from "./components/NotiComponent";
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
+  const [notification, setNotification] = useState<Notification>({
+    message: "",
+    messageType: "success",
+  });
 
   useEffect(() => {
     const getAllDiaries = async () => {
@@ -14,15 +19,33 @@ function App() {
     void getAllDiaries();
   }, []);
 
-  const handleAdd = (diary: Diary) => {
-    // *post service and validation to be added here*
-    const newDiaries = diaries.concat(diary);
-    setDiaries(newDiaries);
+  const handleAdd = async (diary: NewDiary) => {
+    const result = await diaryService.addEntry(diary);
+    const messagePayload: Notification = notification;
+
+    if (result.data) {
+      const newDiaries = diaries.concat(result.data);
+      setDiaries(newDiaries);
+      messagePayload.message = "Successfully added an entry";
+      setNotification(messagePayload);
+      setTimeout(() => {
+        setNotification({ message: "", messageType: "success" });
+      }, 5000);
+    } else if (result.error) {
+      setNotification({ message: result.error, messageType: "error" });
+      setTimeout(() => {
+        setNotification({ message: "", messageType: "success" });
+      }, 5000);
+    }
   };
 
   return (
     <div>
       <h1>Flight Log</h1>
+      <NotiComponent
+        message={notification.message}
+        messageType={notification.messageType}
+      />
       <table style={{ textAlign: "end" }}>
         <thead>
           <tr>

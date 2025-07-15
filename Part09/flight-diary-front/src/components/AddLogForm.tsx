@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import type { Diary, Visibility, Weather } from "../types";
+import type { Diary, Visibility, Weather, NewDiary } from "../types";
 interface FormProps {
   entriesLength: number;
-  handleAdd: (diary: Diary) => void;
+  handleAdd: (diary: NewDiary) => void;
 }
 
-const AddLogForm = ({ entriesLength, handleAdd }: FormProps) => {
+const AddLogForm = ({ handleAdd }: FormProps) => {
   const [date, setDate] = useState("");
   const [weather, setWeather] = useState<Weather>("sunny");
   const [visibility, setVisibility] = useState<Visibility>("good");
@@ -13,8 +13,7 @@ const AddLogForm = ({ entriesLength, handleAdd }: FormProps) => {
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const newEntry: Diary = {
-      id: entriesLength + 1,
+    const newEntry: NewDiary = {
       date: date,
       weather: weather,
       visibility: visibility,
