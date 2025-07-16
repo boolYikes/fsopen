@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import type { Diary, Visibility, Weather, NewDiary } from "../types";
+import type { Visibility, Weather, NewDiary } from "../types";
+import { WeatherEnum, VisibilityEnum } from "../types";
+
 interface FormProps {
   entriesLength: number;
   handleAdd: (diary: NewDiary) => void;
@@ -7,8 +9,8 @@ interface FormProps {
 
 const AddLogForm = ({ handleAdd }: FormProps) => {
   const [date, setDate] = useState("");
-  const [weather, setWeather] = useState<Weather>("sunny");
-  const [visibility, setVisibility] = useState<Visibility>("good");
+  const [weather, setWeather] = useState<Weather>(WeatherEnum.Sunny);
+  const [visibility, setVisibility] = useState<Visibility>(VisibilityEnum.Good);
   const [comment, setComment] = useState("");
 
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -21,8 +23,8 @@ const AddLogForm = ({ handleAdd }: FormProps) => {
     };
     handleAdd(newEntry);
     setDate("");
-    setWeather("sunny");
-    setVisibility("good");
+    setWeather(WeatherEnum.Sunny);
+    setVisibility(VisibilityEnum.Good);
     setComment("");
   };
 
@@ -30,67 +32,40 @@ const AddLogForm = ({ handleAdd }: FormProps) => {
     <form onSubmit={onSubmit}>
       <h3>Add log</h3>
       <input
-        type="text"
+        type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
       />
       <div className="weather-radio">
-        <label>
-          <input
-            type="radio"
-            value="rainy"
-            onChange={() => setWeather("rainy")}
-            checked={weather === "rainy"}
-          />
-          rainy
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="sunny"
-            onChange={() => setWeather("sunny")}
-            checked={weather === "sunny"}
-          />
-          sunny
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="windy"
-            onChange={() => setWeather("windy")}
-            checked={weather === "windy"}
-          />
-          windy
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="cloudy"
-            onChange={() => setWeather("cloudy")}
-            checked={weather === "cloudy"}
-          />
-          cloudy
-        </label>
+        {Object.values(WeatherEnum).map((forecast) => {
+          return (
+            // assume all forecast enums are unique...
+            <label key={forecast}>
+              <input
+                type="radio"
+                value={forecast}
+                onChange={() => setWeather(forecast)}
+                checked={weather === forecast}
+              />
+              {forecast}
+            </label>
+          );
+        })}
       </div>
       <div className="vis-radio">
-        <label>
-          <input
-            type="radio"
-            value="good"
-            onChange={() => setVisibility("good")}
-            checked={visibility === "good"}
-          />
-          good
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="poor"
-            onChange={() => setVisibility("poor")}
-            checked={visibility === "poor"}
-          />
-          poor
-        </label>
+        {Object.values(VisibilityEnum).map((visStat) => {
+          return (
+            <label>
+              <input
+                type="radio"
+                value={visStat}
+                onChange={() => setVisibility(visStat)}
+                checked={visibility === visStat}
+              />
+              {visStat}
+            </label>
+          );
+        })}
       </div>
       <input
         type="text"

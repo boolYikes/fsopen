@@ -116,5 +116,6 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.17/Part09/flight-diary-front">Ex9.17 Flight diary frontend</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.18/Part09/flight-diary-front">Ex9.18 Flight diary add entry</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.19/Part09/flight-diary">Ex9.19 Flight diary error notification</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.20/Part09/flight-diary">Ex9.20 Flight diary radio + date type input</a></li>
     </ul>
 </details>
