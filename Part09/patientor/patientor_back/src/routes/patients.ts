@@ -7,7 +7,7 @@ import z from "zod";
 const router = express.Router();
 
 router.get("/", (_req, res: Response<PatientMasked[]>) => {
-  const allPatients = patientService.getSSNOmitted();
+  const allPatients = patientService.getPatients();
   res.status(200).json(allPatients);
 });
 
