@@ -7,11 +7,13 @@ export interface Diagnosis {
   latin?: string;
 }
 
-export type Gender = "male" | "female" | "other";
+export interface Entry {
+  content: string; // placeholder
+}
 
 export type NewPatient = z.infer<typeof NewPatientSchema>;
 export interface Patient extends NewPatient {
   id: string;
 }
 
-export type PatientSSNExcluded = Omit<Patient, "ssn">;
+export type PatientMasked = Omit<Patient, "ssn" | "entries">;

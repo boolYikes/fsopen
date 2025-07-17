@@ -1,5 +1,5 @@
 import patientData from "../../data/patients";
-import { Patient, PatientSSNExcluded, NewPatient } from "../types";
+import { Patient, PatientMasked, NewPatient } from "../types";
 import { v1 as uuid } from "uuid";
 
 const patients: Patient[] = patientData;
@@ -10,7 +10,7 @@ const getPatients = (): Patient[] => {
 };
 
 // Does not actually enforce the return data
-const getSSNOmitted = (): PatientSSNExcluded[] => {
+const getSSNOmitted = (): PatientMasked[] => {
   return patientData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,

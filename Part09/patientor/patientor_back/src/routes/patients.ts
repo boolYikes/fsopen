@@ -1,12 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
-import { NewPatient, Patient, PatientSSNExcluded } from "../types";
+import type { NewPatient, Patient, PatientMasked } from "../types";
 import patientService from "../services/patientService";
 import { NewPatientSchema } from "../utils";
 import z from "zod";
 
 const router = express.Router();
 
-router.get("/", (_req, res: Response<PatientSSNExcluded[]>) => {
+router.get("/", (_req, res: Response<PatientMasked[]>) => {
   const allPatients = patientService.getSSNOmitted();
   res.status(200).json(allPatients);
 });

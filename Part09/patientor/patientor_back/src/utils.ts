@@ -10,6 +10,7 @@ export const NewPatientSchema = z.object({
   dateOfBirth: z.string().date(),
   occupation: z.string(),
   gender: z.nativeEnum(Gender),
+  entries: z.array(z.string()),
 });
 
 export const validateNewPatient = (obj: unknown): NewPatient => {
