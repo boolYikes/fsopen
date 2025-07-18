@@ -4,7 +4,7 @@ import { Route, Link, Routes, useMatch } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
-import { Gender, Patient } from "./types";
+import { Gender, Patient, Individual } from "./types";
 
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
@@ -27,17 +27,19 @@ const App = () => {
   const patientFound = patientMatch
     ? patients.find((patient) => patient.id === patientMatch.params.id)
     : null;
-  const patientToShow = {
+  const patientToShow: Individual = {
     name: "",
     ssn: "",
     occupation: "",
     gender: Gender.Other,
+    entries: [],
   };
   if (patientFound) {
     patientToShow.name = patientFound.name;
     patientToShow.ssn = patientFound.ssn;
     patientToShow.occupation = patientFound.occupation;
     patientToShow.gender = patientFound.gender;
+    patientToShow.entries = patientFound.entries;
   }
 
   return (

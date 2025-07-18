@@ -30,6 +30,19 @@ const PatientDetails = (props: Individual) => {
       </h3>
       <p>ssn: {props.ssn}</p>
       <p>occupation: {props.occupation}</p>
+      <h3>Entires</h3>
+      {props.entries?.map((entry) => {
+        return (
+          <div key={entry.id}>
+            <p>date: {entry.date}</p>
+            <p>description: {entry.description}</p>
+            <h4>diagnosis</h4>
+            {entry.diagnosisCodes?.map((diag) => {
+              return <div key={diag}>{diag}</div>;
+            })}
+          </div>
+        );
+      })}
     </div>
   );
 };
