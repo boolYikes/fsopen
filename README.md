@@ -119,5 +119,7 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.20/Part09/flight-diary">Ex9.20 Flight diary radio + date type input</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.21/Part09/patientor">Ex9.21 Patientor, step 1</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.22/Part09/patientor">Ex9.22 Patientor, step 2</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.23/Part09/patientor">Ex9.23 Patientor, step 3</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.24/Part09/patientor">Ex9.24 Patientor, step 4</a></li>
     </ul>
 </details>
