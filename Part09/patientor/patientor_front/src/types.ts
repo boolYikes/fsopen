@@ -62,5 +62,8 @@ export interface Patient {
   entries: Entry[];
 }
 
+export type PatientSpecificDiags = { diags: Diagnosis[] };
+
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
-export type Individual = Omit<Patient, "id" | "dateOfBirth">;
+export type Individual = Omit<Patient, "id" | "dateOfBirth"> &
+  PatientSpecificDiags;

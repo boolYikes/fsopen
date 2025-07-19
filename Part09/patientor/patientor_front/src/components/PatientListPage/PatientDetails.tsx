@@ -31,15 +31,21 @@ const PatientDetails = (props: Individual) => {
       <p>ssn: {props.ssn}</p>
       <p>occupation: {props.occupation}</p>
       <h3>Entires</h3>
+      <hr />
       {props.entries?.map((entry) => {
         return (
           <div key={entry.id}>
             <p>date: {entry.date}</p>
             <p>description: {entry.description}</p>
             <h4>diagnosis</h4>
-            {entry.diagnosisCodes?.map((diag) => {
-              return <div key={diag}>{diag}</div>;
+            {props.diags?.map((diag) => {
+              return (
+                <div key={diag.code}>
+                  {diag.code}: {diag.name}
+                </div>
+              );
             })}
+            <hr />
           </div>
         );
       })}

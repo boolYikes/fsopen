@@ -112,6 +112,34 @@ const patients: Patient[] = [
       },
     ],
   },
+  {
+    id: "d2773c6e-f723-11e9-8f0b-362b9e1baba7",
+    name: "Deeeee",
+    dateOfBirth: "1988-04-09",
+    ssn: "090471-1000",
+    gender: Gender.Male,
+    occupation: "Zippity Doodah",
+    entries: [
+      {
+        id: "54a8746e-34c4-5cf4-zf72-kfecd039be9a",
+        date: "2019-05-02",
+        specialist: "Dr Upyours",
+        diagnosisCodes: ["Z57.1", "Z74.3", "M51.2"],
+        type: EntryType.HealthCheck,
+        description: "Babo maniac.",
+        healthCheckRating: 0,
+      },
+      {
+        id: "54a8746e-34c4-5cf4-zf72-kfecd1111e9a",
+        date: "2019-05-03",
+        specialist: "Dr Upyours",
+        diagnosisCodes: ["Z57.1", "Z74.3"],
+        type: EntryType.HealthCheck,
+        description: "Babo joojo",
+        healthCheckRating: 0,
+      },
+    ],
+  },
 ];
 
 const validated: Patient[] = patients.map((obj) => {
