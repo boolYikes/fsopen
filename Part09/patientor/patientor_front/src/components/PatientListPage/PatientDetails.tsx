@@ -1,5 +1,6 @@
 import type { Individual } from "../../types";
 import { Gender } from "../../types";
+import EntryDetails from "./EntryDetails";
 
 const PatientDetails = (props: Individual) => {
   let genderSymbol = "";
@@ -35,17 +36,20 @@ const PatientDetails = (props: Individual) => {
       {props.entries?.map((entry) => {
         return (
           <div key={entry.id}>
-            <p>date: {entry.date}</p>
-            <p>description: {entry.description}</p>
-            <h4>diagnosis</h4>
-            {props.diags?.map((diag) => {
-              return (
-                <div key={diag.code}>
-                  {diag.code}: {diag.name}
-                </div>
-              );
-            })}
+            <table>
+              <tbody>
+                <EntryDetails entry={entry} />
+              </tbody>
+            </table>
             <hr />
+          </div>
+        );
+      })}
+      <h3>Diagnosis</h3>
+      {props.diags?.map((diag) => {
+        return (
+          <div key={diag.code}>
+            {diag.code}: {diag.name}
           </div>
         );
       })}
