@@ -1,11 +1,21 @@
-import express, { NextFunction, Request, Response } from "express";
-import type { NewPatient, Patient, PatientMasked } from "../types";
+import express, { Request, Response } from "express";
+import type {
+  NewEntry,
+  Entry,
+  NewPatient,
+  Patient,
+  PatientMasked,
+} from "../types";
 import patientService from "../services/patientService";
-import { NewPatientSchema } from "../utils";
-import z from "zod";
+import {
+  errorMiddleware,
+  newEntryParser,
+  newPatientParser,
+} from "../middlewares";
 
 const router = express.Router();
 
+// GETs
 router.get("/", (_req, res: Response<PatientMasked[]>) => {
   const allPatients = patientService.getPatients();
   res.status(200).json(allPatients);
@@ -21,33 +31,23 @@ router.get("/:id", (req, res) => {
   }
 });
 
-// middleware... in a separate file?
-const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    NewPatientSchema.parse(req.body);
-    next();
-  } catch (error: unknown) {
-    next(error);
-  }
-};
-const errorMiddleware = (
-  error: unknown,
-  _req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (error instanceof z.ZodError) {
-    res.status(400).send({ error: error.issues });
-  } else {
-    next(error);
-  }
-};
+// POSTs
 router.post(
   "/",
   newPatientParser,
   (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
     const addedPatient = patientService.addPatient(req.body);
     res.json(addedPatient);
+  }
+);
+
+router.post(
+  "/:id/entries",
+  newEntryParser,
+  (req: Request<{ id: string }, unknown, NewEntry>, res: Response<Entry>) => {
+    const payload: NewEntry = req.body;
+    const result: Entry = patientService.addEntry(req.params.id, payload);
+    res.status(201).json(result);
   }
 );
 

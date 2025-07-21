@@ -1,5 +1,11 @@
 import z from "zod";
-import { NewPatientSchema, EntrySchema } from "./utils";
+import {
+  NewPatientSchema,
+  EntrySchema,
+  HealthCheckEntrySchema,
+  HospitalEntrySchema,
+  OccupationalHealthcareEntrySchema,
+} from "./utils";
 
 export interface Diagnosis {
   code: string;
@@ -39,3 +45,9 @@ export interface Patient extends NewPatient {
 }
 
 export type PatientMasked = Omit<Patient, "ssn" | "entries">;
+
+// export type NewEntry = Entry extends unknown ? Omit<Entry, "id"> : never;
+export type NewEntry =
+  | Omit<z.infer<typeof HealthCheckEntrySchema>, "id">
+  | Omit<z.infer<typeof HospitalEntrySchema>, "id">
+  | Omit<z.infer<typeof OccupationalHealthcareEntrySchema>, "id">;
