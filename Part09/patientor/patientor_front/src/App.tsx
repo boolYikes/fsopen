@@ -4,16 +4,21 @@ import { Route, Link, Routes, useMatch } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
 
 import { apiBaseUrl } from "./constants";
-import { Gender, Patient, Individual, Diagnosis } from "./types";
+import { Gender, Patient, Individual, Diagnosis, Entry } from "./types";
 
 import patientService from "./services/patients";
 import diagService from "./services/diagnoses";
 import PatientListPage from "./components/PatientListPage";
-import PatientDetails from "./components/PatientListPage/PatientDetails";
+import PatientDetails from "./components/PatientDetails";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+  });
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
@@ -37,6 +42,7 @@ const App = () => {
     : null;
   const patientToShow: Individual = {
     // should i declare it as a state? ...
+    id: "",
     name: "",
     ssn: "",
     occupation: "",
@@ -45,8 +51,9 @@ const App = () => {
     diags: [],
   };
 
-  let patientSpecificDiags: Diagnosis[] = [];
+  let patientSpecificDiags: Diagnosis[] = []; // this is trippy ...
   if (patientFound) {
+    patientToShow.id = patientFound.id;
     patientToShow.name = patientFound.name;
     patientToShow.ssn = patientFound.ssn;
     patientToShow.occupation = patientFound.occupation;
@@ -67,6 +74,19 @@ const App = () => {
     patientToShow.diags = patientSpecificDiags;
   }
 
+  const onAddEntry = (id: string, newEntry: Entry) => {
+    const newPatients = patients.map((patient) => {
+      if (patient.id === id) {
+        return {
+          ...patient,
+          entries: [...(patient.entries || []), newEntry],
+        };
+      }
+      return patient;
+    });
+    setPatients(newPatients);
+  };
+
   return (
     <div className="App">
       <Container>
@@ -76,6 +96,7 @@ const App = () => {
         <Button component={Link} to="/" variant="contained" color="primary">
           Home
         </Button>
+        <Notification message={notification} />
         <Divider hidden />
         <Routes>
           <Route
@@ -86,7 +107,13 @@ const App = () => {
           />
           <Route
             path="/patient/:id"
-            element={<PatientDetails {...patientToShow} />}
+            element={
+              <PatientDetails
+                patientToShow={patientToShow}
+                onAddEntry={onAddEntry}
+                notify={setNotification}
+              />
+            }
           />
         </Routes>
       </Container>

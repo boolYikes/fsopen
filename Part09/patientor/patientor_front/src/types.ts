@@ -65,5 +65,20 @@ export interface Patient {
 export type PatientSpecificDiags = { diags: Diagnosis[] };
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
-export type Individual = Omit<Patient, "id" | "dateOfBirth"> &
-  PatientSpecificDiags;
+export type Individual = Omit<Patient, "dateOfBirth"> & PatientSpecificDiags;
+
+export type EntryFormValues =
+  | Omit<OccupationalHealthcareEntry, "id">
+  | Omit<HospitalEntry, "id">
+  | Omit<HealthCheckEntry, "id">;
+
+export type EntryFromProps = {
+  id: string;
+  onAddEntry: (id: string, entry: Entry) => void;
+  notify: React.Dispatch<
+    React.SetStateAction<{
+      type: string;
+      message: string;
+    }>
+  >;
+};
