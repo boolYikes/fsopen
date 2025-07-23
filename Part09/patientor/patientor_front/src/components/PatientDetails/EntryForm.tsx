@@ -1,4 +1,13 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import patientService from "../../services/patients";
 import {
@@ -13,29 +22,68 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
-  const [healthRating, setHealthRating] = useState("");
+  const [healthRating, setHealthRating] = useState(0);
   const [diagCodes, setDiagCodes] = useState<Array<Diagnosis["code"]>>([]); // must validate
   const [diagCode, setDiagCode] = useState("");
+  const [entryType, setEntryType] = useState(EntryType.HealthCheck);
+  const [dischargeDate, setDischargeDate] = useState("");
+  const [dischargeCriteria, setDischargeCriteria] = useState("");
+  const [employer, setEmployer] = useState("");
+  const [leaveStart, setLeaveStart] = useState("");
+  const [leaveEnd, setLeaveEnd] = useState("");
+
+  const isRating = (val: number): val is HealthCheckRating => {
+    return Object.values(HealthCheckRating).includes(val as HealthCheckRating);
+  };
+  // const isEntryType = (val: string): val is EntryType => {
+  //   return Object.values(EntryType).includes(val as EntryType);
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload: EntryFormValues = {
+    const basePayload = {
       description,
       date,
       specialist,
       diagnosisCodes: diagCodes,
-      healthCheckRating: HealthCheckRating.Healthy,
-      type: EntryType.HealthCheck,
+      type: entryType,
     };
+    let payload: EntryFormValues;
+    switch (entryType) {
+      case EntryType.HealthCheck:
+        payload = {
+          ...basePayload,
+          healthCheckRating: healthRating,
+        };
+        break;
+      case EntryType.Hospital:
+        payload = {
+          ...basePayload,
+          discharge: { date: dischargeDate, criteria: dischargeCriteria },
+        };
+        break;
+      case EntryType.OccupationalHealthcare:
+        payload = {
+          ...basePayload,
+          employerName: employer,
+          sickLeave: { startDate: leaveStart, endDate: leaveEnd },
+        };
+    }
     try {
       const result = await patientService.addEntry(id, payload);
       onAddEntry(id, result);
       setDescription("");
       setDate("");
       setSpecialist("");
-      setHealthRating("");
       setDiagCodes([]);
       setDiagCode("");
+      setEntryType(EntryType.HealthCheck);
+      setHealthRating(HealthCheckRating.Healthy);
+      setDischargeDate("");
+      setDischargeCriteria("");
+      setEmployer("");
+      setLeaveStart("");
+      setLeaveEnd("");
       notify({ type: "success", message: "Successfully added!" });
       setTimeout(() => {
         notify({ type: "", message: "" });
@@ -64,8 +112,10 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         onChange={(e) => setDescription(e.target.value)}
         fullWidth
         variant="standard"
-        margin="normal"
+        margin="dense"
       />
+
+      {/* Should be a date type */}
       <TextField
         label="Date"
         name="Date"
@@ -73,7 +123,7 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         onChange={(e) => setDate(e.target.value)}
         fullWidth
         variant="standard"
-        margin="normal"
+        margin="dense"
       />
       <TextField
         label="Specialist"
@@ -82,19 +132,10 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         onChange={(e) => setSpecialist(e.target.value)}
         fullWidth
         variant="standard"
-        margin="normal"
+        margin="dense"
       />
       <TextField
-        label="Healthcheck Rating"
-        name="Healthcheck Rating"
-        value={healthRating}
-        onChange={(e) => setHealthRating(e.target.value)}
-        fullWidth
-        variant="standard"
-        margin="normal"
-      />
-      <TextField
-        label={diagCodes ? diagCodes.join(" ") : "Diagnosis codes"}
+        label={diagCodes.join(" ")}
         name="Diagnoses Codes"
         value={diagCode}
         onChange={(e) => {
@@ -108,12 +149,128 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         }}
         fullWidth
         variant="standard"
-        margin="normal"
-        placeholder="Use the Space key for multiple codes"
+        margin="dense"
+        placeholder="Diagnosis codes: Use the Space key at the end of each code"
       />
+      <FormLabel>Choose an entry type</FormLabel>
+      {/* On change must reset other entry type inputs in case the user changes mind mid-input */}
+      <RadioGroup
+        value={entryType}
+        onChange={(e) => setEntryType(e.target.value as EntryType)}
+        sx={{ display: "flex", flexDirection: "row" }}
+      >
+        <FormControlLabel
+          value={EntryType.HealthCheck}
+          control={<Radio />}
+          label={EntryType.HealthCheck}
+        />
+        <FormControlLabel
+          value={EntryType.Hospital}
+          control={<Radio />}
+          label={EntryType.Hospital}
+        />
+        <FormControlLabel
+          value={EntryType.OccupationalHealthcare}
+          control={<Radio />}
+          label={EntryType.OccupationalHealthcare}
+        />
+      </RadioGroup>
+
+      {entryType === EntryType.HealthCheck && (
+        <>
+          <FormLabel>Choose health check rating</FormLabel>
+          <RadioGroup
+            value={healthRating}
+            onChange={(e) => {
+              const target = parseInt(e.target.value);
+              if (isRating(target)) {
+                setHealthRating(target);
+              }
+            }}
+            sx={{ display: "flex", flexDirection: "row" }}
+          >
+            <FormControlLabel
+              value={HealthCheckRating.Healthy}
+              control={<Radio />}
+              label={HealthCheckRating.Healthy}
+            />
+            <FormControlLabel
+              value={HealthCheckRating.LowRisk}
+              control={<Radio />}
+              label={HealthCheckRating.LowRisk}
+            />
+            <FormControlLabel
+              value={HealthCheckRating.HighRisk}
+              control={<Radio />}
+              label={HealthCheckRating.HighRisk}
+            />
+            <FormControlLabel
+              value={HealthCheckRating.CriticalRisk}
+              control={<Radio />}
+              label={HealthCheckRating.CriticalRisk}
+            />
+          </RadioGroup>
+        </>
+      )}
+
+      {entryType === EntryType.Hospital && (
+        <>
+          <TextField
+            label="Discharge date"
+            type="date"
+            value={dischargeDate}
+            onChange={(e) => setDischargeDate(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            margin="dense"
+          />
+          <TextField
+            label="Discharge criteria"
+            value={dischargeCriteria}
+            onChange={(e) => setDischargeCriteria(e.target.value)}
+            fullWidth
+            variant="standard"
+            margin="dense"
+          />
+        </>
+      )}
+
+      {entryType === EntryType.OccupationalHealthcare && (
+        <>
+          <TextField
+            label="Employer"
+            value={employer}
+            onChange={(e) => setEmployer(e.target.value)}
+            fullWidth
+            variant="standard"
+            margin="dense"
+          />
+          <TextField
+            label="Sick leave start"
+            type="date"
+            value={leaveStart}
+            onChange={(e) => setLeaveStart(e.target.value)}
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="Sick leave end"
+            type="date"
+            value={leaveEnd}
+            onChange={(e) => setLeaveEnd(e.target.value)}
+            margin="dense"
+            InputLabelProps={{ shrink: true }}
+          />
+        </>
+      )}
 
       {/* Make it togglable */}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginTop: "1rem",
+        }}
+      >
         <Button type="reset" variant="contained" color="warning">
           cancel
         </Button>

@@ -32,17 +32,17 @@ interface BaseEntry {
 }
 
 export interface HealthCheckEntry extends BaseEntry {
-  type: EntryType.HealthCheck;
-  healthCheckRating: HealthCheckRating;
+  type: string;
+  healthCheckRating: number;
 }
 
 export interface HospitalEntry extends BaseEntry {
-  type: EntryType.Hospital;
+  type: string;
   discharge: { date: string; criteria: string };
 }
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
-  type: EntryType.OccupationalHealthcare;
+  type: string;
   employerName: string;
   sickLeave: { startDate: string; endDate: string };
 }

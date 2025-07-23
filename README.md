@@ -125,5 +125,6 @@
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.26/Part09/patientor">Ex9.26 Patientor, step 6</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.27/Part09/patientor">Ex9.27 Patientor, step 7</a></li>
         <li><a href="https://github.com/boolYikes/fsopen/tree/9.28/Part09/patientor">Ex9.28 Patientor, step 8</a></li>
+        <li><a href="https://github.com/boolYikes/fsopen/tree/9.29/Part09/patientor">Ex9.29 Patientor, step 9</a></li>
     </ul>
 </details>
