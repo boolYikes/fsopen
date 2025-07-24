@@ -81,4 +81,5 @@ export type EntryFromProps = {
       message: string;
     }>
   >;
+  diags: Diagnosis[];
 };

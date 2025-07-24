@@ -1,10 +1,15 @@
 import {
   Box,
   Button,
+  FormControl,
   FormControlLabel,
   FormLabel,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
   Radio,
   RadioGroup,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,13 +23,18 @@ import {
   HealthCheckRating,
 } from "../../types";
 
-const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
+const EntryForm: React.FC<EntryFromProps> = ({
+  id,
+  onAddEntry,
+  notify,
+  diags,
+}) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
   const [healthRating, setHealthRating] = useState(0);
   const [diagCodes, setDiagCodes] = useState<Array<Diagnosis["code"]>>([]); // must validate
-  const [diagCode, setDiagCode] = useState("");
+  // const [diagCode, setDiagCode] = useState("");
   const [entryType, setEntryType] = useState(EntryType.HealthCheck);
   const [dischargeDate, setDischargeDate] = useState("");
   const [dischargeCriteria, setDischargeCriteria] = useState("");
@@ -76,7 +86,7 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
       setDate("");
       setSpecialist("");
       setDiagCodes([]);
-      setDiagCode("");
+      // setDiagCode("");
       setEntryType(EntryType.HealthCheck);
       setHealthRating(HealthCheckRating.Healthy);
       setDischargeDate("");
@@ -98,6 +108,15 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
     }
   };
 
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: 48 * 4.5 + 8,
+        width: 250,
+      },
+    },
+  };
+
   return (
     <Box
       component="form"
@@ -114,16 +133,14 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         variant="standard"
         margin="dense"
       />
-
-      {/* Should be a date type */}
       <TextField
         label="Date"
+        type="date"
         name="Date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
-        fullWidth
-        variant="standard"
         margin="dense"
+        InputLabelProps={{ shrink: true }}
       />
       <TextField
         label="Specialist"
@@ -134,7 +151,33 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         variant="standard"
         margin="dense"
       />
-      <TextField
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="diagCodes-label" shrink>
+          Diagnosis codes
+        </InputLabel>
+        <Select
+          labelId="diagCodes-label"
+          id="diagCodes"
+          multiple
+          value={diagCodes}
+          onChange={(e) => {
+            const val = e.target.value;
+            setDiagCodes(
+              // On autofill we get a stringified value.
+              typeof val === "string" ? val.split(",") : val
+            );
+          }}
+          input={<OutlinedInput label="diagCodes" />}
+          MenuProps={MenuProps}
+        >
+          {diags.map((diag) => (
+            <MenuItem key={diag.code} value={diag.code}>
+              {diag.code}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      {/* <TextField
         label={diagCodes.join(" ")}
         name="Diagnoses Codes"
         value={diagCode}
@@ -151,7 +194,8 @@ const EntryForm: React.FC<EntryFromProps> = ({ id, onAddEntry, notify }) => {
         variant="standard"
         margin="dense"
         placeholder="Diagnosis codes: Use the Space key at the end of each code"
-      />
+      /> */}
+      <br />
       <FormLabel>Choose an entry type</FormLabel>
       {/* On change must reset other entry type inputs in case the user changes mind mid-input */}
       <RadioGroup

@@ -51,7 +51,6 @@ const App = () => {
     diags: [],
   };
 
-  let patientSpecificDiags: Diagnosis[] = []; // this is trippy ...
   if (patientFound) {
     patientToShow.id = patientFound.id;
     patientToShow.name = patientFound.name;
@@ -61,17 +60,6 @@ const App = () => {
     patientToShow.entries = patientFound.entries; // If the diags attrib pans out, this will become redundant
     // different entries can have duplicate diagnosis? I'm assuming
     // Getting it from the patients api would be simpler but this is the instruction 🤔
-    let diags: string[] = [];
-    patientFound.entries.map((entry) => {
-      if (entry.diagnosisCodes) {
-        diags = diags.concat(entry.diagnosisCodes);
-      }
-    });
-    const uniques = [...new Set(diags)];
-    patientSpecificDiags = diagnoses.filter((diag) =>
-      uniques?.find((code) => code === diag.code)
-    );
-    patientToShow.diags = patientSpecificDiags;
   }
 
   const onAddEntry = (id: string, newEntry: Entry) => {
@@ -112,6 +100,7 @@ const App = () => {
                 patientToShow={patientToShow}
                 onAddEntry={onAddEntry}
                 notify={setNotification}
+                diags={diagnoses}
               />
             }
           />

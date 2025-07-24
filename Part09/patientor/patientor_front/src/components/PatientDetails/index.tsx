@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import type { Entry, Individual } from "../../types";
+import type { Diagnosis, Entry, Individual } from "../../types";
 import { Gender } from "../../types";
 import EntryDetails from "./EntryDetails";
 import EntryForm from "./EntryForm";
@@ -8,6 +8,7 @@ const PatientDetails = ({
   patientToShow,
   onAddEntry,
   notify,
+  diags,
 }: {
   patientToShow: Individual;
   onAddEntry: (id: string, newEntry: Entry) => void;
@@ -17,6 +18,7 @@ const PatientDetails = ({
       message: string;
     }>
   >;
+  diags: Diagnosis[];
 }) => {
   let genderSymbol = "";
 
@@ -39,6 +41,18 @@ const PatientDetails = ({
       break;
   }
 
+  let diagsToShow: Array<Diagnosis> = [];
+  let codes: Array<Diagnosis["code"]> = [];
+  patientToShow.entries.map((entry) => {
+    if (entry.diagnosisCodes) {
+      codes = [...codes, ...entry.diagnosisCodes];
+    }
+  });
+  const uniques = [...new Set(codes)];
+  diagsToShow = diags.filter((diag) =>
+    uniques?.find((code) => code === diag.code)
+  );
+
   return (
     <div>
       <h3>
@@ -50,6 +64,7 @@ const PatientDetails = ({
         id={patientToShow.id}
         onAddEntry={onAddEntry}
         notify={notify}
+        diags={diags}
       />
       <h3>Entires</h3>
       <hr />
@@ -66,7 +81,7 @@ const PatientDetails = ({
         );
       })}
       <h3>Diagnosis</h3>
-      {patientToShow.diags?.map((diag) => {
+      {diagsToShow?.map((diag) => {
         return (
           <div key={diag.code}>
             {diag.code}: {diag.name}
